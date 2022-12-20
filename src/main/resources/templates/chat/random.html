@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="/js/sockjs.js"></script>
+    <script src="/js/stomp.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div class="content">
+    <ul id="chatBox">
+        <li>test</li>
+    </ul>
+    <input name="message"/>
+    <input type="button" id="sendBtn" value="보내기" onclick="send()">
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/ /*]]>*/
+    const roomId = [[${chatRoom.roomId}]];
+    /*]]>*/
+
+    const chatBox = document.getElementById("chatBox");
+    const messageInput = document.getElementsByName("message")[0];
+    const sendBtn = document.getElementById("sendBtn");
+
+    const sock = new SockJS("/ranChat");
+    const client = Stomp.over(sock);
+
+    client.connect({}, function (){
+        client.subscribe('/subscript/chat/room/'+roomId,function (chat){
+            let content = JSON.parse(chat.body);
+
+            let liElement = document.createElement("li");
+            let textNode = document.createTextNode(content.message);
+            liElement.appendChild(textNode);
+            chatBox.appendChild(liElement);
+        })
+    })
+    function send() {
+        client.send('/publish/chat/message',{},JSON.stringify({roomId: roomId, message:messageInput.value}));
+        messageInput.value="";
+    }
+
+
+</script>
+</body>
+</html>
