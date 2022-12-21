@@ -1,6 +1,6 @@
 package kr.tareun.ranchat.controller;
 
-import kr.tareun.ranchat.domain.vo.ChatRoomVO;
+import kr.tareun.ranchat.model.vo.ChatRoomVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;

@@ -1,15 +1,13 @@
-package kr.tareun.ranchat.domain.vo;
+package kr.tareun.ranchat.model.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.awt.*;
 
 @Getter
-@Setter
-@ToString
-public class ChatMessage {
+@AllArgsConstructor
+public class ChatMessageVO {
     private String roomId;
     private String message;
     private TrayIcon.MessageType type;

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <script src="/js/sockjs.js"></script>
     <script src="/js/stomp.js"></script>
-    <title>Title</title>
+    <title>채팅 테스트</title>
 </head>
 <body>
 <div class="content">
@@ -23,13 +22,12 @@
 
     const chatBox = document.getElementById("chatBox");
     const messageInput = document.getElementsByName("message")[0];
-    const sendBtn = document.getElementById("sendBtn");
 
     const sock = new SockJS("/ranChat");
     const client = Stomp.over(sock);
 
     client.connect({}, function (){
-        client.subscribe('/subscript/chat/room/'+roomId,function (chat){
+        client.subscribe('/subscript/chat/room/'+roomId,function (chat){ // '/subscript/chat/room/'+roomId 를 구독.
             let content = JSON.parse(chat.body);
 
             let liElement = document.createElement("li");

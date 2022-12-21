@@ -1,6 +1,6 @@
 package kr.tareun.ranchat.controller;
 
-import kr.tareun.ranchat.domain.vo.ChatMessage;
+import kr.tareun.ranchat.model.vo.ChatMessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -16,13 +16,12 @@ public class ChatMessageController {
     }
 
     @MessageMapping("/chat/join")
-    public void join(ChatMessage message){
+    public void join(ChatMessageVO message){
         template.convertAndSend("/subscript/chat/room/"+message.getRoomId(),message);
     }
 
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message){
-        System.out.println(message);
+    public void message(ChatMessageVO message){
         template.convertAndSend("/subscript/chat/room/"+message.getRoomId(),message);
     }
 }

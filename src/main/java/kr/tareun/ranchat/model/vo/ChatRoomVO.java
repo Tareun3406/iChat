@@ -1,4 +1,4 @@
-package kr.tareun.ranchat.domain.vo;
+package kr.tareun.ranchat.model.vo;
 
 
 import lombok.Getter;
