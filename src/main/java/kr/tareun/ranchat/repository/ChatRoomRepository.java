@@ -12,7 +12,7 @@ import java.util.Queue;
 @Repository
 public class ChatRoomRepository {
     Queue<ChatRoomVO> roomQueue = new LinkedList<>();  // 대기열에 등록된 방
-    Map<String,ChatRoomVO> rooms= new HashMap<>(); // 생성된 방
+    Map<String,ChatRoomVO> rooms= new HashMap<>(); // 생성된 방목록
 
 
     // 랜덤매칭 시작
@@ -23,6 +23,10 @@ public class ChatRoomRepository {
             roomQueue.add(room);   // 생성된 방 대기열에 등록
         }else {
             room = roomQueue.remove(); // 대기열에 등록된 방 가져오기
+            if (!rooms.containsKey(room.getRoomId())){ // 대기열에 있었지만 방목록이 사라진 경우.
+                rooms.put(room.getRoomId(), room);
+                roomQueue.add(room);
+            }
         }
         return room;
     }
