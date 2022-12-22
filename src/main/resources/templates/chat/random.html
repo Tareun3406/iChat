@@ -17,17 +17,21 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/ /*]]>*/
-    const roomId = [[${chatRoom.roomId}]];
+    const roomId = [[${room.roomId}]];
+    const userId = [[${userId}]];
     /*]]>*/
 
     const chatBox = document.getElementById("chatBox");
     const messageInput = document.getElementsByName("message")[0];
 
+
     const sock = new SockJS("/ranChat");
     const client = Stomp.over(sock);
 
+    let subRoomId;
     client.connect({}, function (){
-        client.subscribe('/subscript/chat/room/'+roomId,function (chat){ // '/subscript/chat/room/'+roomId 를 구독.
+
+        subRoomId = client.subscribe('/subscript/chat/room/'+roomId,function (chat){ // '/subscript/chat/room/'+roomId 를 구독.
             let content = JSON.parse(chat.body);
 
             let liElement = document.createElement("li");
@@ -35,11 +39,20 @@
             liElement.appendChild(textNode);
             chatBox.appendChild(liElement);
         })
+        const message = userId+"님이 채팅방에 입장하였습니다."
+        client.send('/publish/chat/join',{},JSON.stringify({roomId: roomId, message:message, writer:userId}));
     })
     function send() {
-        client.send('/publish/chat/message',{},JSON.stringify({roomId: roomId, message:messageInput.value}));
+        client.send('/publish/chat/message',{},JSON.stringify({roomId: roomId, message:messageInput.value , writer:userId}));
         messageInput.value="";
     }
+
+    window.onbeforeunload = function (){ // 페이지 이동 or 브라우저 종료
+        const message = userId+"님이 채팅방에서 퇴장하였습니다."
+        client.send('/publish/chat/out',{},JSON.stringify({roomId:roomId, message:message, writer:userId})); // 대화 종료 메세지 송출
+        subRoomId.unsubscribe(); // 구독 취소
+        client.disconnect();     // 연결 해제
+    };
 
 
 </script>

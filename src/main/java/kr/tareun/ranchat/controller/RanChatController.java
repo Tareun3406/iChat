@@ -1,17 +1,29 @@
 package kr.tareun.ranchat.controller;
 
 import kr.tareun.ranchat.model.vo.ChatRoomVO;
+import kr.tareun.ranchat.repository.ChatRoomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class RanChatController {
 
+    private final ChatRoomRepository chatRoomRepository;
+
+    @Autowired
+    public RanChatController(ChatRoomRepository chatRoomRepository) {
+        this.chatRoomRepository = chatRoomRepository;
+    }
+
     @GetMapping("/ranChat")
-    public ModelAndView ranChatRoom(){
+    public ModelAndView ranChatRoom(@RequestParam(required = false, value = "id") String id){
         ModelAndView mv = new ModelAndView("/chat/random");
-        mv.addObject("chatRoom", new ChatRoomVO());
+        ChatRoomVO room = chatRoomRepository.matchRoom();
+        mv.addObject("room",room);
+        mv.addObject("userId",id);
         return mv;
     }
 
