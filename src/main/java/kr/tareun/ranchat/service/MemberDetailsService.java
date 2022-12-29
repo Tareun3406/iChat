@@ -1,4 +1,4 @@
-package kr.tareun.ranchat.security;
+package kr.tareun.ranchat.service;
 
 import kr.tareun.ranchat.model.entitiy.Member;
 import kr.tareun.ranchat.model.vo.MemberLoginVO;

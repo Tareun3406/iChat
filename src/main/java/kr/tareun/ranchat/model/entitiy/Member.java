@@ -3,7 +3,6 @@ package kr.tareun.ranchat.model.entitiy;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 @ToString
@@ -12,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Member implements Serializable {
+public class Member{
 
     @Id
     @Column(length = 100)

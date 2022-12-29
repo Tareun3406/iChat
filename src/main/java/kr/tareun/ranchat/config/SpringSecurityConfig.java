@@ -1,4 +1,4 @@
-package kr.tareun.ranchat.security;
+package kr.tareun.ranchat.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

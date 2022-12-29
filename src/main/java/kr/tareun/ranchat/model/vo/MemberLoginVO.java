@@ -1,7 +1,6 @@
 package kr.tareun.ranchat.model.vo;
 
 import kr.tareun.ranchat.model.entitiy.Member;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,7 +11,6 @@ import java.util.Collection;
 
 @Getter
 @EqualsAndHashCode
-@AllArgsConstructor
 public class MemberLoginVO implements UserDetails {
     private String username;
     private String password;

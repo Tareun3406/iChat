@@ -24,8 +24,6 @@ public class Auth implements GrantedAuthority {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
-
-
     @Override
     public String getAuthority() {
         return authColumn.auth;
