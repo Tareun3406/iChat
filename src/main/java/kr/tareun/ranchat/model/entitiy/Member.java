@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
-@ToString
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
