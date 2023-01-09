@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #4ab0d0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -35,4 +35,73 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+
+/* ----------------------------------index 페이지 -------------------------------*/
+.title {
+  text-align: center;
+  vertical-align: top;
+  font-size: 128px;
+  color: #ffffff;
+  margin-top: 0em;
+  margin-bottom: 0.5em;
+}
+.home {
+  margin-top: -3em;
+}
+.menu-button {
+  display: block;
+  margin: 1em;
+  font-size: 36px;
+  color: #ffffff;
+}
+
+
+/*------------------------------------랜덤 채팅 페이지 --------------------------*/
+.chat-box {
+  position: relative;
+  background: white;
+  width: 500px;
+  height: 600px;
+  color: black;
+}
+
+.chat-message-receive {
+  background-color: #88d6ef;
+  padding: 0.5em 1em;
+  width: max-content;
+  margin: 0.5em 1em;
+  clear: both;
+}
+
+.chat-message-send {
+  background-color: #88d6ef;
+  padding: 0.5em 1em;
+  width: max-content;
+  margin: 0.5em 1em;
+  float: right;
+}
+
+.message-system {
+  clear: both;
+  margin: 0.5em;
+}
+
+.message-form {
+  position: absolute;
+  bottom: 0px;
+  min-width: max-content;
+  margin: 1em 2em;
+}
+
+.message-input {
+  width: 300px;
+  height: 30px;
+}
+
+.send-button {
+  font-size: 20px;
+  margin-left: 10px;
 }
