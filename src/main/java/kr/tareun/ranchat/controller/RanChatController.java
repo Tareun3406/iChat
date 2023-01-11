@@ -27,4 +27,10 @@ public class RanChatController {
         return mv;
     }
 
+    @GetMapping("/ranChatTest")
+    public ChatRoomVO ranChatRoomTest(){
+        ChatRoomVO room = chatRoomRepository.matchRoom();
+        return room;
+    }
+
 }

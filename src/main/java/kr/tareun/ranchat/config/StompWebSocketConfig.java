@@ -11,12 +11,12 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ranChat").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/ranChatWs").setAllowedOriginPatterns("*").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/publish"); // 1:1 전파
+        registry.setApplicationDestinationPrefixes("/publish");
         registry.enableSimpleBroker("/subscript");
     }
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import Home from './Home';
+import Home from './component/home/Home';
 import { Routes, Route } from "react-router";
-import RanChat from "./RanChat";
+import RanChat from "./component/ranChat/RanChat";
 
 function App() {
   return (
