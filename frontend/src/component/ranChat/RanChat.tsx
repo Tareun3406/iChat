@@ -3,6 +3,7 @@ import Sock from 'sockjs-client';
 import {Client, IStompSocket} from "@stomp/stompjs";
 import useDidMountEffect from '../util/useDidMountEffect';
 import MessageContainer from "./MessageContainer";
+import GetUserId from "../util/GetUserId";
 
 class MessageVO{
     roomId;
@@ -18,6 +19,7 @@ class MessageVO{
 
 const RanChat: FC = () => {
     const[room, setRoom] = useState({roomId: "", member: []})
+    const [userId,setUserId] = GetUserId();
     const[messageInput, setMessageInput] = useState("");
     const[messageLog, setMessageLog] = useState<MessageVO[]>();
     const[received, setReceived] = useState<MessageVO>();
@@ -42,7 +44,7 @@ const RanChat: FC = () => {
         })
         client.current.publish({
             destination:'/publish/chat/message',
-            body:JSON.stringify({roomId: room.roomId, message:"입장테스트" , writer:"system"})
+            body:JSON.stringify({roomId: room.roomId, message:userId+"님이 입장하였습니다." , writer:"system"})
         });
     }
 
@@ -70,13 +72,13 @@ const RanChat: FC = () => {
     const send = ()=>{
             client.current.publish({
                 destination:'/publish/chat/message',
-                body:JSON.stringify({roomId: room.roomId, message:messageInput , writer:"userId"})
+                body:JSON.stringify({roomId: room.roomId, message:messageInput , writer:userId})
             });
     }
 
     return (
         <div className="chat-box">
-            <MessageContainer messages={messageLog}/>
+            <MessageContainer messages={messageLog} userId={userId}/>
             <div className="message-form">
                 <input className="message-input" onChange={(event)=>setMessageInput(event.target.value)}/>
                 <button type="button" className="send-button" onClick={send}>보내기</button>

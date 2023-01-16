@@ -25,8 +25,9 @@ public class SpringSecurityConfig{
 
         // 시큐리티 로그인 설정
         http.formLogin()
+                .defaultSuccessUrl("http://localhost:3000/")
                 .permitAll().and().csrf().disable(); // csrf 토큰 사용 안함(임시)
+
         return http.build();
     }
-
 }

@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 const LoginForm: FC = ()=>{
 
     return (
-        <form className="login-form">
+        <form className="login-form" method="post" action="http://localhost:8080/login">
             <div>
                 <h2 className="form-top-title">아이톡 로그인</h2>
             </div>

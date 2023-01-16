@@ -8,6 +8,7 @@ interface Message {
 
 interface Messages {
     messages: Message[] | undefined;
+    userId:   String | React.Dispatch<React.SetStateAction<String | undefined>> | undefined;
 }
 
 const MessageContainer: FC<Messages> = (messages) => {
@@ -18,7 +19,7 @@ const MessageContainer: FC<Messages> = (messages) => {
             return (
                 <li key={index} className={className}>{message.message}</li>
             )
-        } else if (message.writer === "test") className = "chat-message-send"; // 본인이 보낸 내용일 경우
+        } else if (message.writer === messages.userId) className = "chat-message-send"; // 본인이 보낸 내용일 경우
         else className = "chat-message-receive";// 받은 메세지
         return (
             <li key={index} className={className}>{message.writer}:{message.message}</li>

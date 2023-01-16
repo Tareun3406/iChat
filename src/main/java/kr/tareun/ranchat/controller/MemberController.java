@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
+
 @RestController
 public class MemberController {
 
@@ -27,6 +29,14 @@ public class MemberController {
     public String joinMember(MemberDTO member){
         memberService.joinMember(member);
         return null;
+    }
+
+    @GetMapping("/getMember")
+    public String getMember(Principal principal){
+        if (principal == null){
+            return null;
+        }
+        return principal.getName();
     }
 
 }

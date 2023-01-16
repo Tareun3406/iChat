@@ -1,7 +1,8 @@
 import React, {FC} from "react";
+import {useNavigate} from "react-router-dom";
 
 const JoinForm: FC = () =>{
-
+    const navigate = useNavigate();
     return(
         <form className="login-form" method="post" action="/join">
             <div>
@@ -35,7 +36,7 @@ const JoinForm: FC = () =>{
                 </div>
             </div>
             <div>
-                <button type="button" className="help-link" onClick={()=> window.history.back()}> 뒤로가기 </button>
+                <button type="button" className="help-link" onClick={ ()=>navigate(-1) }> 뒤로가기 </button>
                 <button className="help-link">회원가입 하기</button>
             </div>
         </form>

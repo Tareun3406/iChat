@@ -90,6 +90,7 @@ li {
     width: max-content;
     margin: 0.5em 1em;
     float: right;
+    clear: both;
 }
 
 .message-system {
