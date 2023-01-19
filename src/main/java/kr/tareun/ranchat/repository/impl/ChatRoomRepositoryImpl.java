@@ -33,9 +33,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     // 채팅방 입장
-    public void joinRoom(ChatMessageVO message){
-        String joiner = message.getWriter();
-        rooms.get(message.getRoomId()).joinMember(joiner);
+    public void joinRoom(ChatMessageVO message, String nickname){
+        String joinerId = message.getWriter();
+        rooms.get(message.getRoomId()).joinMember(joinerId, nickname);
     }
 
     // 채팅방 퇴장
@@ -48,12 +48,16 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
         }
     }
 
+    @Override
+    public ChatRoomVO getRoomInfo(String roomId) {
+        return rooms.get(roomId);
+    }
+
     // 채팅방 생성
     private ChatRoomVO createRoom(){
         ChatRoomVO room = new ChatRoomVO();
         rooms.put(room.getRoomId(), room);
         return room;
     }
-
 
 }

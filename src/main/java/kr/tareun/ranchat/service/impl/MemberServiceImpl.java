@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -38,5 +40,12 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(memberEntity);
         authRepository.save(authEntity);
+    }
+
+    @Override
+    public String getMemberNickname(String username) {
+        Optional<Member> optional = memberRepository.findById(username);
+        if(optional.isPresent()) return optional.get().getNickname();
+        else return username;
     }
 }

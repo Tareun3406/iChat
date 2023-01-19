@@ -32,7 +32,7 @@ const JoinForm: FC = () =>{
             <div className="form-tag">
                 <p className="tag-name">비밀번호 확인</p>
                 <div className="form-input-back">
-                    <input type="text" name='pwCheck' className="form-input"/>
+                    <input type="password" name='pwCheck' className="form-input"/>
                 </div>
             </div>
             <div>

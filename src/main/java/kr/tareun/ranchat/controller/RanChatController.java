@@ -33,4 +33,10 @@ public class RanChatController {
         return room;
     }
 
+    @GetMapping("/getRoomInfo")
+    public ChatRoomVO getRoomInfo(String roomId){
+        ChatRoomVO room = chatRoomRepository.getRoomInfo(roomId);
+        return room;
+    }
+
 }

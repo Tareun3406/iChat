@@ -11,12 +11,14 @@ import lombok.Setter;
 public class MemberDTO {
 
     private String username;
+    private String nickname;
     private String password;
 
     public Member toEntity() {
         return Member.builder()
                 .username(username)
                 .password(password)
+                .nickname(nickname)
                 .build();
     }
 }
