@@ -9,7 +9,10 @@ const GetUserId = ()=>{
                 return response.text();
             })
             .then((text)=>{
-                setUserId(text);
+                if(text === "")
+                    setUserId("익명");
+                else
+                    setUserId(text);
             })
     },[]);
     return [userId,setUserId];

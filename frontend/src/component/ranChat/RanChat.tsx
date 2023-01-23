@@ -58,7 +58,7 @@ const RanChat: FC = () => {
         });
         client.current.publish({
             destination:'/publish/chat/join',
-            body:JSON.stringify({roomId: roomInfo?.roomId, message:userId+"님이 입장하였습니다." , writer:userId, type:"memberIn"})
+            body:JSON.stringify({roomId: roomInfo?.roomId, message:"'"+userId+"'"+" 님이 입장하였습니다." , writer:userId, type:"memberIn"})
         });
     };
 

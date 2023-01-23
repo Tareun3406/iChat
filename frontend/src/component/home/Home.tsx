@@ -9,10 +9,10 @@ const Home: React.FC = () => {
   const [userId,setUserId] = GetUserId();
 
   useEffect(() =>{
-    if (userId==''){
+    if (userId=='익명'){
       setLink(
           <div>
-            <Link to="/RanChat" className="menu-button"> 게스트로 시작</Link>
+            <Link to="/RanChat" className="menu-button"> '익명'으로 시작</Link>
             <Link to="/LoginForm" className="menu-button">로그인</Link>
             <Link to="/JoinForm" className="menu-button">회원가입</Link>
           </div>
