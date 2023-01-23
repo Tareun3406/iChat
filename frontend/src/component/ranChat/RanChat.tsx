@@ -20,12 +20,21 @@ class MessageVO{
         this.type = type;
     }
 }
+class RoomInfo{
+    roomId;
+    memberMap;
+    constructor(roomId: string, memberMap: string|undefined) {
+        this.roomId = roomId;
+        if(memberMap !== undefined){
+            this.memberMap = new Map(Object.entries(memberMap))
+        }
+    }
+}
 
 const RanChat: FC = () => {
-    const[roomId, setRoomId] = useState<string>();
-    const[memberMap, setMemberMap] = useState<Map<string,string>>()
+    const[roomInfo, setRoomInfo] = useState<RoomInfo>();
     const[userId,setUserId] = GetUserId();
-    const messageInput = useRef("");
+    const[messageInput, setMessageInput] = useState("");
     const[messageLog, setMessageLog] = useState<MessageVO[]>();
     const[received, setReceived] = useState<MessageVO>();
 
@@ -43,13 +52,13 @@ const RanChat: FC = () => {
     }))
     // 통신 연결시(activate()) 실행됨 방ID를 기준으로 구독.
     client.current.onConnect= ()=>{
-        client.current.subscribe('/subscript/chat/room/'+roomId, (chat)=>{ // 구독후 해당 경로로 메세지 수신시 실행함수
+        client.current.subscribe('/subscript/chat/room/'+roomInfo?.roomId, (chat)=>{ // 구독후 해당 경로로 메세지 수신시 실행함수
             const content = JSON.parse(chat.body);
             setReceived(content);
         });
         client.current.publish({
             destination:'/publish/chat/join',
-            body:JSON.stringify({roomId: roomId, message:userId+"님이 입장하였습니다." , writer:userId, type:"memberIn"})
+            body:JSON.stringify({roomId: roomInfo?.roomId, message:userId+"님이 입장하였습니다." , writer:userId, type:"memberIn"})
         });
     };
 
@@ -60,24 +69,22 @@ const RanChat: FC = () => {
                 return response.json();
             })
             .then((json) =>{
-                setRoomId(json.roomId);
-                setMemberMap(new Map(Object.entries(json.members)));
+                setRoomInfo(new RoomInfo(json.roomId, undefined));
             })
             .catch((error) => console.log("error: ", error));
     },[]);
     // 방 정보 가져온 뒤 실행. WebSocket 통신 시작
-    useDidMountEffect(()=>{ client.current.activate() },[roomId]);
+    useDidMountEffect(()=>{ client.current.activate() },[roomInfo]);
     // 메세지 수신시 log 추가
     useEffect(()=> {
         if (received !== undefined) {
             if(received.type === "memberIn" || received.type === "memberOut"){
-                fetch("getRoomInfo?roomId="+roomId)
+                fetch("getRoomInfo?roomId="+roomInfo?.roomId)
                     .then((response) => {
                         return response.json();
                     })
                     .then((json) =>{
-                        setRoomId(json.roomId);
-                        setMemberMap(new Map(Object.entries(json.members)));
+                        setRoomInfo(new RoomInfo(json.roomId,json.members));
                     })
                     .catch((error) => console.log("error: ", error));
             }
@@ -89,19 +96,24 @@ const RanChat: FC = () => {
     const send = ()=>{
             client.current.publish({
                 destination:'/publish/chat/message',
-                body:JSON.stringify({roomId: roomId, message:messageInput.current , writer:userId, type:"message"})
+                body:JSON.stringify({roomId: roomInfo?.roomId, message:messageInput , writer:userId, type:"message"})
             });
+            setMessageInput("");
     };
-    const setMessageInput= (input: string)=>{
-        messageInput.current = input
+    const messageOnChange= (target: any)=>{
+        setMessageInput(target.value);
     };
 
     return (
         <div className="chat-box">
-            <ChatBoxHead memberMap={memberMap} userId={userId}/>
-            <MessageContainer messages={messageLog} userId={userId} members={memberMap}/>
+            <ChatBoxHead memberMap={roomInfo?.memberMap} userId={userId}/>
+            <MessageContainer messages={messageLog} userId={userId} members={roomInfo?.memberMap}/>
             <div className="message-form">
-                <input className="message-input" onChange={(event)=>setMessageInput(event.target.value)}/>
+                <input className="message-input"
+                       onChange={(event)=>messageOnChange(event.target)}
+                       value={messageInput}
+                       onKeyDown={(event)=>{if(event.key === 'Enter') send();}}
+                />
                 <button type="button" className="send-button" onClick={send}>보내기</button>
             </div>
         </div>

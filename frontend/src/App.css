@@ -79,11 +79,17 @@ li {
     border-bottom: solid 1px #4ab0d0;
 }
 
+.chat-message-container {
+    height: 465px;
+    margin: 0px;
+    overflow-y: scroll;
+}
+
 .chat-message-receive {
     background-color: #88d6ef;
     padding: 0.5em 1em;
     width: max-content;
-    margin: 0.5em 1em;
+    margin: 0.1em 1em;
     clear: both;
 }
 
@@ -91,7 +97,7 @@ li {
     background-color: #FFE713;
     padding: 0.5em 1em;
     width: max-content;
-    margin: 0.5em 1em;
+    margin: 0.1em 1em;
     float: right;
     clear: both;
 }
@@ -102,10 +108,10 @@ li {
 }
 
 .message-form {
-    position: absolute;
     bottom: 0px;
+    border-top: solid 1px #4ab0d0;
     min-width: max-content;
-    margin: 1em 2em;
+    padding: 1em 2em;
 }
 
 .message-input {

@@ -10,14 +10,12 @@ interface Message {
 interface MessageContainer {
     messages: Message[] | undefined;
     userId:   string | React.Dispatch<React.SetStateAction<string | undefined>> | undefined;
-    members : any | undefined;
+    members : Map<string, string> | undefined;
 }
 
 const MessageContainer: FC<MessageContainer> = (container) => {
     const test = container.messages?.map((message, index) => {
         let className: string;  // li 태그에 들어갈 클래스명
-        let memberName = container.members.get(message.writer);
-        console.log(memberName);
         switch (message.type){
             case "memberIn":
             case "memberOut":
