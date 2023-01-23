@@ -4,13 +4,15 @@ import {Client, IStompSocket} from "@stomp/stompjs";
 import useDidMountEffect from '../util/useDidMountEffect';
 import MessageContainer from "./MessageContainer";
 import GetUserId from "../util/GetUserId";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 class MessageVO{
     roomId;
     message;
     writer;
     type;
-    constructor(roomId: String, message: String, writer: string, type: String) {
+    constructor(roomId: string, message: string, writer: string, type: string) {
         this.roomId = roomId;
         this.message = message;
         this.writer = writer;
@@ -22,7 +24,7 @@ const RanChat: FC = () => {
     const[roomId, setRoomId] = useState<string>();
     const[memberMap, setMemberMap] = useState<Map<string,string>>()
     const[userId,setUserId] = GetUserId();
-    const[messageInput, setMessageInput] = useState("");
+    const messageInput = useRef("");
     const[messageLog, setMessageLog] = useState<MessageVO[]>();
     const[received, setReceived] = useState<MessageVO>();
 
@@ -82,14 +84,15 @@ const RanChat: FC = () => {
             else setMessageLog([...messageLog, received]);
         }
     },[received]);
-    useEffect(()=>{
-    },);
 
     const send = ()=>{
             client.current.publish({
                 destination:'/publish/chat/message',
-                body:JSON.stringify({roomId: roomId, message:messageInput , writer:userId, type:"message"})
+                body:JSON.stringify({roomId: roomId, message:messageInput.current , writer:userId, type:"message"})
             });
+    }
+    const setMessageInput= (input: string)=>{
+        messageInput.current = input
     }
 
     return (

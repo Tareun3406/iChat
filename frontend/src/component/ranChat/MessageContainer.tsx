@@ -1,15 +1,15 @@
 import React, {FC} from "react";
 
 interface Message {
-    roomId: String;
-    message: String;
+    roomId: string;
+    message: string;
     writer: string;
-    type: String;
+    type: string;
 }
 
 interface MessageContainer {
     messages: Message[] | undefined;
-    userId:   String | React.Dispatch<React.SetStateAction<String | undefined>> | undefined;
+    userId:   string | React.Dispatch<React.SetStateAction<string | undefined>> | undefined;
     members : any | undefined;
 }
 
