@@ -75,6 +75,9 @@ li {
     height: 600px;
     color: black;
 }
+.chat-box-head {
+    border-bottom: solid 1px #4ab0d0;
+}
 
 .chat-message-receive {
     background-color: #88d6ef;

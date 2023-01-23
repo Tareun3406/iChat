@@ -6,6 +6,7 @@ import MessageContainer from "./MessageContainer";
 import GetUserId from "../util/GetUserId";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
+import ChatBoxHead from "./ChatBoxHead";
 
 class MessageVO{
     roomId;
@@ -50,7 +51,7 @@ const RanChat: FC = () => {
             destination:'/publish/chat/join',
             body:JSON.stringify({roomId: roomId, message:userId+"님이 입장하였습니다." , writer:userId, type:"memberIn"})
         });
-    }
+    };
 
     // mount 했을때 한번 실행. WebSocket 통신에 사용할 방 정보 가져오기.
     useEffect(()=>{
@@ -90,13 +91,14 @@ const RanChat: FC = () => {
                 destination:'/publish/chat/message',
                 body:JSON.stringify({roomId: roomId, message:messageInput.current , writer:userId, type:"message"})
             });
-    }
+    };
     const setMessageInput= (input: string)=>{
         messageInput.current = input
-    }
+    };
 
     return (
         <div className="chat-box">
+            <ChatBoxHead memberMap={memberMap} userId={userId}/>
             <MessageContainer messages={messageLog} userId={userId} members={memberMap}/>
             <div className="message-form">
                 <input className="message-input" onChange={(event)=>setMessageInput(event.target.value)}/>
