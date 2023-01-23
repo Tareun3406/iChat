@@ -32,11 +32,13 @@ class RoomInfo{
 }
 
 const RanChat: FC = () => {
-    const[roomInfo, setRoomInfo] = useState<RoomInfo>();
-    const[userId,setUserId] = GetUserId();
-    const[messageInput, setMessageInput] = useState("");
-    const[messageLog, setMessageLog] = useState<MessageVO[]>();
-    const[received, setReceived] = useState<MessageVO>();
+    const [roomInfo, setRoomInfo] = useState<RoomInfo>();
+    const [userId,setUserId] = GetUserId();
+    const [messageInput, setMessageInput] = useState("");
+    const [messageLog, setMessageLog] = useState<MessageVO[]>();
+    const [received, setReceived] = useState<MessageVO>();
+
+
 
     // Stomp 클라이언트 생성
     const client = useRef(new Client({
@@ -62,6 +64,15 @@ const RanChat: FC = () => {
         });
     };
 
+    const onBeforeUnload = ()=>{
+        client.current.publish({
+            destination:'/publish/chat/out',
+            body:JSON.stringify({roomId: roomInfo?.roomId, message:"'"+userId+"'"+" 님이 퇴장하였습니다." , writer:userId, type:"memberOut"})
+        });
+        // client.current.deactivate().then(()=>console.log("disconnected"));
+    }
+
+
     // mount 했을때 한번 실행. WebSocket 통신에 사용할 방 정보 가져오기.
     useEffect(()=>{
         fetch("ranChatTest")
@@ -74,7 +85,15 @@ const RanChat: FC = () => {
             .catch((error) => console.log("error: ", error));
     },[]);
     // 방 정보 가져온 뒤 실행. WebSocket 통신 시작
-    useDidMountEffect(()=>{ client.current.activate() },[roomInfo]);
+    useDidMountEffect(()=>{
+        client.current.activate()
+        window.addEventListener("beforeunload", onBeforeUnload);
+        window.addEventListener("popstate",onBeforeUnload);
+        return ()=>{
+            window.removeEventListener("beforeunload", onBeforeUnload);
+            window.removeEventListener("popstate",onBeforeUnload);
+        }
+    },[roomInfo?.roomId]);
     // 메세지 수신시 log 추가
     useEffect(()=> {
         if (received !== undefined) {
@@ -94,11 +113,13 @@ const RanChat: FC = () => {
     },[received]);
 
     const send = ()=>{
+        if(messageInput !== ""){
             client.current.publish({
                 destination:'/publish/chat/message',
                 body:JSON.stringify({roomId: roomInfo?.roomId, message:messageInput , writer:userId, type:"message"})
             });
             setMessageInput("");
+        }
     };
     const messageOnChange= (target: any)=>{
         setMessageInput(target.value);
