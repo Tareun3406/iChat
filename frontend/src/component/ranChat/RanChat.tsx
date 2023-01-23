@@ -69,7 +69,9 @@ const RanChat: FC = () => {
             destination:'/publish/chat/out',
             body:JSON.stringify({roomId: roomInfo?.roomId, message:"'"+userId+"'"+" 님이 퇴장하였습니다." , writer:userId, type:"memberOut"})
         });
-        // client.current.deactivate().then(()=>console.log("disconnected"));
+        window.removeEventListener("beforeunload", onBeforeUnload);
+        window.removeEventListener("popstate",onBeforeUnload);
+        client.current.deactivate().then();
     }
 
 
@@ -89,10 +91,6 @@ const RanChat: FC = () => {
         client.current.activate()
         window.addEventListener("beforeunload", onBeforeUnload);
         window.addEventListener("popstate",onBeforeUnload);
-        return ()=>{
-            window.removeEventListener("beforeunload", onBeforeUnload);
-            window.removeEventListener("popstate",onBeforeUnload);
-        }
     },[roomInfo?.roomId]);
     // 메세지 수신시 log 추가
     useEffect(()=> {
