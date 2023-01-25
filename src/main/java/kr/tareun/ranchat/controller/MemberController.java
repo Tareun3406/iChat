@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
 @RestController
@@ -32,9 +33,9 @@ public class MemberController {
     }
 
     @GetMapping("/getMember")
-    public String getMember(Principal principal){
+    public String getMember(Principal principal, HttpSession session){
         if (principal == null){
-            return null;
+            return "Guest"+session.getId();
         }
         return principal.getName();
     }

@@ -9,7 +9,7 @@ const Home: React.FC = () => {
   const [userId,setUserId] = GetUserId();
 
   useEffect(() =>{
-    if (userId=='익명'){
+    if (userId?.toString().substring(0,5) ==='Guest'){
       setLink(
           <div>
             <Link to="/RanChat" className="menu-button"> '익명'으로 시작</Link>

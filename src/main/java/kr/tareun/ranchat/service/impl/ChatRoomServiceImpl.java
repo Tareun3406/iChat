@@ -50,7 +50,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             String nickName = member.getNickname();
             chatRoomRepository.joinRoom(message,nickName);
         }else {
-            chatRoomRepository.joinRoom(message,message.getWriter());
+            chatRoomRepository.joinRoom(message,"익명");
         }
     }
 

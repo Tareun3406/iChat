@@ -9,9 +9,6 @@ const GetUserId = ()=>{
                 return response.text();
             })
             .then((text)=>{
-                if(text === "")
-                    setUserId("익명");
-                else
                     setUserId(text);
             })
     },[]);
