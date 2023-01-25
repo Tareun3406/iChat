@@ -6,30 +6,30 @@ import kr.tareun.ranchat.repository.ChatRoomRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 @Repository
 public class ChatRoomRepositoryImpl implements ChatRoomRepository {
-    Queue<ChatRoomVO> roomQueue = new LinkedList<>();  // 대기열에 등록된 방
-    Map<String,ChatRoomVO> rooms= new HashMap<>(); // 생성된 방목록
 
+    private final Map<String,ChatRoomVO> rooms= new HashMap<>(); // 생성된 방목록
 
-    // 랜덤매칭 시작
-    public ChatRoomVO matchRoom(){
-        ChatRoomVO room;
-        if (roomQueue.isEmpty()){               // 대기중인 방이 없을 경우
-            room = createRoom();                // 새로운 방 생성
-            roomQueue.add(room);   // 생성된 방 대기열에 등록
-        }else {
-            room = roomQueue.remove(); // 대기열에 등록된 방 가져오기
-            if (!rooms.containsKey(room.getRoomId())){ // 대기열에 있었지만 방목록이 사라진 경우.
-                rooms.put(room.getRoomId(), room);
-                roomQueue.add(room);
-            }
-        }
+    // 새로운 방 생성
+    @Override
+    public ChatRoomVO createRoom() {
+        ChatRoomVO room = new ChatRoomVO();
+        rooms.put(room.getRoomId(), room);
         return room;
+    }
+
+    // 방정보를 가지고 기존 방 목록에 추가
+    @Override
+    public void addRoom(ChatRoomVO room) {
+        rooms.put(room.getRoomId(), room);
+    }
+
+    @Override
+    public void deleteRoom(String roomId) {
+        rooms.remove(roomId);
     }
 
     // 채팅방 입장
@@ -49,15 +49,12 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
+    public Map<String, ChatRoomVO> getRoomList() {
+        return rooms;
+    }
+
+    @Override
     public ChatRoomVO getRoomInfo(String roomId) {
         return rooms.get(roomId);
     }
-
-    // 채팅방 생성
-    private ChatRoomVO createRoom(){
-        ChatRoomVO room = new ChatRoomVO();
-        rooms.put(room.getRoomId(), room);
-        return room;
-    }
-
 }
