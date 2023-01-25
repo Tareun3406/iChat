@@ -27,12 +27,13 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
         rooms.put(room.getRoomId(), room);
     }
 
+    // 방 목록에서 제거
     @Override
     public void deleteRoom(String roomId) {
         rooms.remove(roomId);
     }
 
-    // 채팅방 입장
+    // 채팅방 입장(채팅방 내에 유저 추가)
     public void joinRoom(ChatMessageVO message, String nickname){
         String joinerId = message.getWriter();
         rooms.get(message.getRoomId()).joinMember(joinerId, nickname);
@@ -44,7 +45,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
         String roomId = message.getRoomId();
         int remaining = rooms.get(roomId).outMember(outer);
         if(remaining == 0){
-            rooms.remove(roomId);   // 남은 인원이 없을경우 채팅방 삭제
+            rooms.remove(roomId);   // 남은 인원이 없을경우 채팅방 목록에서 삭제
         }
     }
 

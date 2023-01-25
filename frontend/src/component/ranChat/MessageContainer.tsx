@@ -10,7 +10,7 @@ interface Message {
 interface MessageContainer {
     messages: Message[] | undefined;
     userId:   string | React.Dispatch<React.SetStateAction<string | undefined>> | undefined;
-    members : Map<string, string> | undefined;
+    memberMap : Map<string, string> | undefined;
 }
 
 const MessageContainer: FC<MessageContainer> = (container) => {
@@ -19,6 +19,10 @@ const MessageContainer: FC<MessageContainer> = (container) => {
         switch (message.type){
             case "memberIn":
             case "memberOut":
+                className = "message-system";
+                return (
+                    <li key={index} className={className}>{container.memberMap?.get(message.writer)}{message.message}</li>
+                )
             case "system" :
                 className = "message-system";
                 return (

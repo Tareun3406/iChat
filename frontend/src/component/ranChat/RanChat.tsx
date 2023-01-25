@@ -60,14 +60,14 @@ const RanChat: FC = () => {
         });
         client.current.publish({
             destination:'/publish/chat/join',
-            body:JSON.stringify({roomId: roomInfo?.roomId, message:"'"+userId+"'"+" 님이 입장하였습니다." , writer:userId, type:"memberIn"})
+            body:JSON.stringify({roomId: roomInfo?.roomId, message:"님이 입장하였습니다." , writer:userId, type:"memberIn"})
         });
     };
 
     const onBeforeUnload = ()=>{
         client.current.publish({
             destination:'/publish/chat/out',
-            body:JSON.stringify({roomId: roomInfo?.roomId, message:"'"+userId+"'"+" 님이 퇴장하였습니다." , writer:userId, type:"memberOut"})
+            body:JSON.stringify({roomId: roomInfo?.roomId, message:"님이 퇴장하였습니다." , writer:userId, type:"memberOut"})
         });
         window.removeEventListener("beforeunload", onBeforeUnload);
         window.removeEventListener("popstate",onBeforeUnload);
@@ -77,7 +77,7 @@ const RanChat: FC = () => {
 
     // mount 했을때 한번 실행. WebSocket 통신에 사용할 방 정보 가져오기.
     useEffect(()=>{
-        fetch("ranChatTest")
+        fetch("ranChat")
             .then((response) => {
                 return response.json();
             })
@@ -126,7 +126,7 @@ const RanChat: FC = () => {
     return (
         <div className="chat-box">
             <ChatBoxHead memberMap={roomInfo?.memberMap} userId={userId}/>
-            <MessageContainer messages={messageLog} userId={userId} members={roomInfo?.memberMap}/>
+            <MessageContainer messages={messageLog} userId={userId} memberMap={roomInfo?.memberMap}/>
             <div className="message-form">
                 <input className="message-input"
                        onChange={(event)=>messageOnChange(event.target)}
