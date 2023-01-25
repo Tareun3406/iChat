@@ -34,10 +34,39 @@ class RoomInfo{
 const RanChat: FC = () => {
     const [roomInfo, setRoomInfo] = useState<RoomInfo>();
     const [userId,setUserId] = GetUserId();
-    const [messageInput, setMessageInput] = useState("");
     const [messageLog, setMessageLog] = useState<MessageVO[]>();
     const [received, setReceived] = useState<MessageVO>();
+    const messageInput = useRef<HTMLInputElement>(null);
 
+    // 페이지 변경시 실행할 함수.(연결종료, 퇴장 메시지 송출)
+    const onBeforeUnload = ()=>{
+        client.current.publish({
+            destination:'/publish/chat/out',
+            body:JSON.stringify({roomId: roomInfo?.roomId, message:"님이 퇴장하였습니다." , writer:userId, type:"memberOut"})
+        });
+        client.current.deactivate().then(); // 통신 종료
+        window.removeEventListener("beforeunload", onBeforeUnload); // 이벤트 리스너 제거.(메모리 누수 방지)
+        window.removeEventListener("popstate",onBeforeUnload);
+    }
+    // 메세지 보내기 함수
+    const sendOnKeyDown = (event: React.KeyboardEvent<HTMLInputElement>)=>{
+        if (event.shiftKey) return;
+        if(event.key==="Enter"){
+            if (!event.nativeEvent.isComposing){
+                send();
+            }
+        }
+        return;
+    }
+    const send = ()=>{
+        if(messageInput.current !== null){
+            client.current.publish({
+                destination:'/publish/chat/message',
+                body:JSON.stringify({roomId: roomInfo?.roomId, message:messageInput.current.value , writer:userId, type:"message"})
+            });
+            messageInput.current.value="";
+        }
+    };
 
 
     // Stomp 클라이언트 생성
@@ -45,14 +74,14 @@ const RanChat: FC = () => {
         webSocketFactory: ()=>{
             return new Sock('http://localhost:8080/ranChatWs') as IStompSocket;
         },
-        debug: function (str) {
-            console.log(str);
-        },
+        // debug: function (str) {
+        //     console.log(str);
+        // },
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000
     }))
-    // 통신 연결시(activate()) 실행됨 방ID를 기준으로 구독.
+    // 통신 연결시(activate()) 실행됨 roomID를 기준으로 구독.
     client.current.onConnect= ()=>{
         client.current.subscribe('/subscript/chat/room/'+roomInfo?.roomId, (chat)=>{ // 구독후 해당 경로로 메세지 수신시 실행함수
             const content = JSON.parse(chat.body);
@@ -64,18 +93,8 @@ const RanChat: FC = () => {
         });
     };
 
-    const onBeforeUnload = ()=>{
-        client.current.publish({
-            destination:'/publish/chat/out',
-            body:JSON.stringify({roomId: roomInfo?.roomId, message:"님이 퇴장하였습니다." , writer:userId, type:"memberOut"})
-        });
-        window.removeEventListener("beforeunload", onBeforeUnload);
-        window.removeEventListener("popstate",onBeforeUnload);
-        client.current.deactivate().then();
-    }
 
-
-    // mount 했을때 한번 실행. WebSocket 통신에 사용할 방 정보 가져오기.
+    // mount 했을때 한번 실행. WebSocket 통신에 사용할 채팅방 매칭
     useEffect(()=>{
         fetch("ranChat")
             .then((response) => {
@@ -96,7 +115,7 @@ const RanChat: FC = () => {
     useEffect(()=> {
         if (received !== undefined) {
             if(received.type === "memberIn" || received.type === "memberOut"){
-                fetch("getRoomInfo?roomId="+roomInfo?.roomId)
+                fetch("getRoomInfo?roomId="+roomInfo?.roomId)// 현재 채팅방의 정보 가져오기(입장한 유저 목록)
                     .then((response) => {
                         return response.json();
                     })
@@ -110,28 +129,14 @@ const RanChat: FC = () => {
         }
     },[received]);
 
-    const send = ()=>{
-        if(messageInput !== ""){
-            client.current.publish({
-                destination:'/publish/chat/message',
-                body:JSON.stringify({roomId: roomInfo?.roomId, message:messageInput , writer:userId, type:"message"})
-            });
-            setMessageInput("");
-        }
-    };
-    const messageOnChange= (target: any)=>{
-        setMessageInput(target.value);
-    };
-
     return (
         <div className="chat-box">
             <ChatBoxHead memberMap={roomInfo?.memberMap} userId={userId}/>
             <MessageContainer messages={messageLog} userId={userId} memberMap={roomInfo?.memberMap}/>
             <div className="message-form">
                 <input className="message-input"
-                       onChange={(event)=>messageOnChange(event.target)}
-                       value={messageInput}
-                       onKeyDown={(event)=>{if(event.key === 'Enter') send();}}
+                       onKeyDown={(event)=>{sendOnKeyDown(event);}}
+                       ref={messageInput}
                 />
                 <button type="button" className="send-button" onClick={send}>보내기</button>
             </div>

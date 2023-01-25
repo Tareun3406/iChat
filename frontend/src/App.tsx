@@ -10,14 +10,12 @@ import LoginForm from "./component/login/LoginForm";
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/RanChat" element={<RanChat />}/>
           <Route path="/JoinForm" element={<JoinForm />}/>
           <Route path="/LoginForm" element={<LoginForm />}/>
         </Routes>
-      </header>
     </div>
   );
 }
