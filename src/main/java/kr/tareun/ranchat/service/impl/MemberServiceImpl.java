@@ -48,4 +48,11 @@ public class MemberServiceImpl implements MemberService {
         if(optional.isPresent()) return optional.get().getNickname();
         else return username;
     }
+
+    @Override
+    public boolean getIsValidEmail(String username) {
+        Optional<Member> optional = memberRepository.findById(username);
+        return optional.isPresent();
+    }
+
 }

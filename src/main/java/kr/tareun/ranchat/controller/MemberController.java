@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -27,12 +29,18 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public String joinMember(MemberDTO member){
+    public void joinMember(MemberDTO member, HttpServletResponse response) throws IOException {
         memberService.joinMember(member);
-        return null;
+        response.sendRedirect("/LoginForm");
     }
 
-    @GetMapping("/getMember")
+    @GetMapping("/getIsValidEmail")
+    public boolean getIsValidEmail(String username){
+        boolean isValid = memberService.getIsValidEmail(username);
+        return isValid;
+    }
+
+    @GetMapping("/getLoginMember")
     public String getMember(Principal principal, HttpSession session){
         if (principal == null){
             return "Guest"+session.getId();

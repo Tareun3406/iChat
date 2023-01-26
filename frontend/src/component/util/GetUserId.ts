@@ -4,7 +4,7 @@ const GetUserId = ()=>{
     const [userId,setUserId] = useState<string>();
     useEffect(()=>{
         console.log("로그인 정보 가져오기");
-        fetch("/getMember")
+        fetch("/getLoginMember")
             .then((response)=>{
                 return response.text();
             })

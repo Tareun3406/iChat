@@ -6,4 +6,6 @@ public interface MemberService {
     public void joinMember(MemberDTO member);
 
     public String getMemberNickname(String username);
+
+    boolean getIsValidEmail(String username);
 }
