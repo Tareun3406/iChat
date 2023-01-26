@@ -178,7 +178,7 @@ li {
     display: block;
     color: white;
     background-color: #88d6ef;
-    margin: auto;
+    margin: 0.8em auto 0 auto;
     border: none;
     height: 2em;
     width: 25rem;
