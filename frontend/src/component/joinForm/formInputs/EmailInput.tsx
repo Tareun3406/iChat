@@ -35,7 +35,7 @@ const EmailValidMessage = (props: props)=>{
     },[emailValue])
 
     return(
-        <div>
+        <div style={{position:"relative"}}>
             <div className="form-tag">
                 <p className="tag-name">이메일</p>
                 <div className="form-input-back">

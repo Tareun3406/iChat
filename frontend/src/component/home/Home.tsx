@@ -8,6 +8,12 @@ const Home: React.FC = () => {
   const [link, setLink] = useState<JSX.Element>();
   const [userId,setUserId] = GetUserId();
 
+  const logout = ()=>{
+    fetch("/logout",{method:"POST"})
+        .then((response)=>{
+        });
+  }
+
   useEffect(() =>{
     if (userId?.toString().substring(0,5) ==='Guest'){
       setLink(
@@ -22,7 +28,7 @@ const Home: React.FC = () => {
       setLink(
       <div>
         <Link to="/RanChat" className="menu-button"> 시작하기</Link>
-        <Link to="/logout" className="menu-button">로그아웃</Link>
+        <a className="menu-button" onClick={logout}>로그아웃</a>
       </div>)
     }
   },[userId])
