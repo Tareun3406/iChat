@@ -1,19 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Link} from "react-router-dom";
 import GetUserId from "../util/GetUserId";
 
 const Home: React.FC = () => {
 
-
   const [link, setLink] = useState<JSX.Element>();
   const [userId,setUserId] = GetUserId();
 
   const logout = ()=>{
-    fetch("/logout",{method:"POST"})
-        .then((response)=>{
-        });
+    fetch("/logout",{
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+    }).then((response)=>{
+      if(response.status === 200){
+        setUserId("Guest");
+      }else{
+      }
+    }).catch(()=>{
+      console.log("연결 오류")
+    })
   }
-
   useEffect(() =>{
     if (userId?.toString().substring(0,5) ==='Guest'){
       setLink(
@@ -26,10 +34,10 @@ const Home: React.FC = () => {
     }
     else{
       setLink(
-      <div>
+      <form>
         <Link to="/RanChat" className="menu-button"> 시작하기</Link>
         <a className="menu-button" onClick={logout}>로그아웃</a>
-      </div>)
+      </form>)
     }
   },[userId])
 

@@ -1,5 +1,6 @@
 package kr.tareun.ranchat.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SpringSecurityConfig{
 
+    final LoginHandler loginHandler;
+
+    @Autowired
+    public SpringSecurityConfig(LoginHandler loginHandler) {
+        this.loginHandler = loginHandler;
+    }
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -25,29 +33,18 @@ public class SpringSecurityConfig{
 
         http.authorizeRequests();
 
-        http.cors();
-
         //비회원 세션관리
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
 
         // 시큐리티 로그인 설정
         http.formLogin()
-                .defaultSuccessUrl("http://localhost:3000/")
-                .failureUrl("http://localhost:3000/LoginForm")
+                .successHandler(loginHandler)
+                .failureHandler(loginHandler)
                 .permitAll().and().csrf().disable(); // csrf 토큰 사용 안함(임시)
 
+        http.logout()
+                .logoutSuccessUrl("http://localhost:3000/")
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID");
         return http.build();
-    }
-
-    @Bean
-    protected CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000/");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }
