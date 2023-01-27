@@ -27,7 +27,13 @@ const LoginForm: FC = ()=>{
             }
         })
     }
-
+    const onKeyDown = (event :React.KeyboardEvent<HTMLInputElement>)=>{
+        if (event.key === "Enter"){
+            if (!event.nativeEvent.isComposing){
+                onLoginBtn();
+            }
+        }
+    }
     return (
         <form className="login-form" method="post" action="/login">
             <div>
@@ -36,13 +42,15 @@ const LoginForm: FC = ()=>{
             <div className="form-tag">
                 <p className="tag-name">아이디</p>
                 <div className="form-input-back">
-                    <input type="text" name="username" className="form-input" ref={emailInput}/>
+                    <input type="text" name="username" className="form-input" ref={emailInput}
+                           onKeyDown={(event)=>{onKeyDown(event)}}/>
                 </div>
             </div>
             <div className="form-tag">
                 <p className="tag-name">비밀번호</p>
                 <div className="form-input-back">
-                    <input type="password" name="password" className="form-input" ref={pwInput}/>
+                    <input type="password" name="password" className="form-input" ref={pwInput}
+                           onKeyDown={(event)=>{onKeyDown(event)}}/>
                 </div>
             </div>
             <div>

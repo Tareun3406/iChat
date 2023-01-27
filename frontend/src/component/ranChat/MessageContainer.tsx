@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useEffect, useRef} from "react";
 
 interface Message {
     roomId: string;
@@ -14,7 +14,24 @@ interface MessageContainer {
 }
 
 const MessageContainer: FC<MessageContainer> = (container) => {
-    const test = container.messages?.map((message, index) => {
+
+    const bottom = useRef<HTMLLIElement>(null);
+    const messageContainer = useRef<HTMLUListElement>(null);
+    const isBottomMessage = useRef(true);
+    const innerHeight = messageContainer.current?.offsetHeight;
+
+    const onScrollEvent = ()=>{
+        const scrollTop = messageContainer.current?.scrollTop;
+        if (scrollTop !== undefined && innerHeight !== undefined){
+            isBottomMessage.current = scrollTop + innerHeight === messageContainer.current?.scrollHeight;
+        }
+    };
+    useEffect(()=>{
+        if(isBottomMessage)
+            bottom.current?.scrollIntoView();
+    })
+
+    const messageLog = container.messages?.map((message, index) => {
         let className: string;  // li 태그에 들어갈 클래스명
         switch (message.type){
             case "memberIn":
@@ -38,8 +55,9 @@ const MessageContainer: FC<MessageContainer> = (container) => {
     })
 
     return (
-        <ul className="chat-message-container">
-            {test}
+        <ul className="chat-message-container" ref={messageContainer} onScroll={onScrollEvent}>
+            {messageLog}
+            <li style={{clear:"both"}} ref={bottom}></li>
         </ul>
     );
 }

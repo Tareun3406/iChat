@@ -7,6 +7,7 @@ import GetUserId from "../util/GetUserId";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
 import ChatBoxHead from "./ChatBoxHead";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 class MessageVO{
     roomId;
@@ -38,6 +39,7 @@ const RanChat: FC = () => {
     const [received, setReceived] = useState<MessageVO>();
     const messageInput = useRef<HTMLInputElement>(null);
 
+
     // 페이지 변경시 실행할 함수.(연결종료, 퇴장 메시지 송출)
     const onBeforeUnload = ()=>{
         client.current.publish({
@@ -67,7 +69,6 @@ const RanChat: FC = () => {
             messageInput.current.value="";
         }
     };
-
 
     // Stomp 클라이언트 생성
     const client = useRef(new Client({
@@ -132,7 +133,7 @@ const RanChat: FC = () => {
     return (
         <div className="chat-box">
             <ChatBoxHead memberMap={roomInfo?.memberMap} userId={userId}/>
-            <MessageContainer messages={messageLog} userId={userId} memberMap={roomInfo?.memberMap}/>
+                <MessageContainer messages={messageLog} userId={userId} memberMap={roomInfo?.memberMap}/>
             <div className="message-form">
                 <input className="message-input"
                        onKeyDown={(event)=>{sendOnKeyDown(event);}}
