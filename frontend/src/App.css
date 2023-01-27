@@ -46,10 +46,16 @@ li {
 }
 
 .menu-button {
+    text-decoration: none;
     display: block;
     margin: 1em;
     font-size: 36px;
     color: #ffffff;
+}
+
+.menu-button:hover{
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 
@@ -71,19 +77,21 @@ li {
     overflow-y: scroll;
 }
 
-.chat-message-receive {
-    background-color: #88d6ef;
+.chat-message-container li{
     padding: 0.5em 1em;
     margin: 0.1em 1em;
+    border-radius: 1em;
     clear: both;
+}
+
+.chat-message-receive {
+    background-color: #88d6ef;
+    float: left;
 }
 
 .chat-message-send {
     background-color: #FFE713;
-    padding: 0.5em 1em;
-    margin: 0.1em 1em;
     float: right;
-    clear: both;
 }
 
 .message-system {
