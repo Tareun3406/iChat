@@ -1,5 +1,6 @@
 import React, {FC, useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import CsrfToken from "../util/CsrfToken";
 
 const LoginForm: FC = ()=>{
 
@@ -7,12 +8,20 @@ const LoginForm: FC = ()=>{
     const [errorMessage, setErrorMessage] = useState(<span></span>);
     const emailInput = useRef<HTMLInputElement>(null);
     const pwInput = useRef<HTMLInputElement>(null);
+    const [csrf, setCsrf] = useState<string>("");
+
+
+    useEffect(() => {
+            CsrfToken(setCsrf)
+        }
+        , [])
 
     const onLoginBtn = ()=>{
-        if(emailInput.current !== null && pwInput.current !== null)
+        if(emailInput.current !== null && pwInput.current !== null && csrf !== undefined)
         fetch("/login",{
             method: "POST",
             headers: {
+                'X-CSRF-Token': csrf,
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: new URLSearchParams({
@@ -35,7 +44,7 @@ const LoginForm: FC = ()=>{
         }
     }
     return (
-        <form className="login-form" method="post" action="/login">
+        <form className="login-form">
             <div>
                 <h2 className="form-top-title">아이톡 로그인</h2>
             </div>

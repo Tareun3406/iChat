@@ -1,8 +1,9 @@
-import React, {FormEvent, useRef} from "react";
+import React, {FormEvent, useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import EmailInput from "./formInputs/EmailInput";
 import NicknameInput from "./formInputs/NicknameInput";
 import PwInput from "./formInputs/PwInput";
+import CsrfToken from "../util/CsrfToken";
 
 const JoinForm = () =>{
     const navigate = useNavigate();
@@ -12,9 +13,15 @@ const JoinForm = () =>{
     const isValidPw = useRef(false);
     const isValidPwCheck = useRef(false);
 
+    const [csrf,setCsrf]  = useState<string>("");
+
+    useEffect(()=>{
+        CsrfToken(setCsrf);
+    },[])
+
     const onSubmit = (event: FormEvent<HTMLFormElement>)=>{
         if(!isValidEmail.current || !isValidNickname.current
-            || !isValidPw.current || !isValidPwCheck.current){
+            || !isValidPw.current || !isValidPwCheck.current || csrf === ""){
             event.preventDefault();
         }
     }
@@ -27,7 +34,7 @@ const JoinForm = () =>{
                     아이톡 회원가입
                 </h2>
             </div>
-
+            <input type="hidden" value={csrf} name="_csrf"/>
             <EmailInput isValidEmail={isValidEmail}/>
             <NicknameInput isValidNickname={isValidNickname}/>
             <PwInput isValidPwInput={isValidPw} isValidPwCheck={isValidPwCheck} />

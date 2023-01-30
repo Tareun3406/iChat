@@ -32,6 +32,7 @@ public class SpringSecurityConfig{
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception{
 
         http.authorizeRequests();
+        http.cors();
 
         //비회원 세션관리
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
@@ -40,11 +41,25 @@ public class SpringSecurityConfig{
         http.formLogin()
                 .successHandler(loginHandler)
                 .failureHandler(loginHandler)
-                .permitAll().and().csrf().disable(); // csrf 토큰 사용 안함(임시)
+                .permitAll();
 
         http.logout()
-                .logoutSuccessUrl("http://localhost:3000/")
                 .invalidateHttpSession(true).deleteCookies("JSESSIONID");
         return http.build();
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOrigin("http://localhost:3000/");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 }

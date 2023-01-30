@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef} from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 
 interface Message {
     roomId: string;
@@ -19,6 +19,8 @@ const MessageContainer: FC<MessageContainer> = (container) => {
     const messageContainer = useRef<HTMLUListElement>(null);
     const isBottomMessage = useRef(true);
     const innerHeight = messageContainer.current?.offsetHeight;
+    const joinerMap = useRef(new Map<string,string>);
+
 
     const onScrollEvent = ()=>{
         const scrollTop = messageContainer.current?.scrollTop;
@@ -35,10 +37,16 @@ const MessageContainer: FC<MessageContainer> = (container) => {
         let className: string;  // li 태그에 들어갈 클래스명
         switch (message.type){
             case "memberIn":
+                if (joinerMap.current.get(message.writer) === undefined)
+                    joinerMap.current.set(message.writer, container.memberMap?.get(message.writer) as string)
+                className = "message-system";
+                return (
+                    <li key={index} className={className}>{joinerMap.current.get(message.writer)}{message.message}</li>
+                )
             case "memberOut":
                 className = "message-system";
                 return (
-                    <li key={index} className={className}>{container.memberMap?.get(message.writer)}{message.message}</li>
+                    <li key={index} className={className}>{joinerMap.current.get(message.writer)}{message.message}</li>
                 )
             case "system" :
                 className = "message-system";
