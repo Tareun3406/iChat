@@ -1,12 +1,9 @@
 package kr.tareun.ranchat.model.vo;
 
-
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.*;
 
-@ToString
 @Getter
 public class ChatRoomVO {
     final private String roomId;

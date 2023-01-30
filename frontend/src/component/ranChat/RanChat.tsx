@@ -7,7 +7,6 @@ import GetUserId from "../util/GetUserId";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
 import ChatBoxHead from "./ChatBoxHead";
-import ScrollToBottom from "react-scroll-to-bottom";
 
 class MessageVO{
     roomId;
