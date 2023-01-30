@@ -16,6 +16,9 @@ public class ChatRoomVO {
     public ChatRoomVO() {
         roomId = UUID.randomUUID().toString();
     }
+    public ChatRoomVO(String roomId){
+        this.roomId = roomId;
+    }
 
     public void joinMember(String memberId, String nickname){
         members.put(memberId, nickname);

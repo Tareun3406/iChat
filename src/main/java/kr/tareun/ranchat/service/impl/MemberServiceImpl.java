@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
     public String getMemberNickname(String username) {
         Optional<Member> optional = memberRepository.findById(username);
         if(optional.isPresent()) return optional.get().getNickname();
-        else return username;
+        else return "익명";
     }
 
     @Override

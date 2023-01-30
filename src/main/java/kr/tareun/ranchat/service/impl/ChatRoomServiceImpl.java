@@ -1,16 +1,14 @@
 package kr.tareun.ranchat.service.impl;
 
-import kr.tareun.ranchat.model.entitiy.Member;
 import kr.tareun.ranchat.model.vo.ChatMessageVO;
 import kr.tareun.ranchat.model.vo.ChatRoomVO;
 import kr.tareun.ranchat.repository.ChatRoomRepository;
-import kr.tareun.ranchat.repository.MemberRepository;
 import kr.tareun.ranchat.service.ChatRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Queue;
 
 @Service
@@ -18,12 +16,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     private final Queue<ChatRoomVO> roomQueue = new LinkedList<>();
     private final ChatRoomRepository chatRoomRepository;
-    private final MemberRepository memberRepository;
 
     @Autowired
-    public ChatRoomServiceImpl(ChatRoomRepository chatRoomRepository, MemberRepository memberRepository) {
+    public ChatRoomServiceImpl(ChatRoomRepository chatRoomRepository) {
         this.chatRoomRepository = chatRoomRepository;
-        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -43,15 +39,15 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
-    public void joinRoom(ChatMessageVO message) {
-        Optional<Member> op = memberRepository.findById(message.getWriter());
-        if (op.isPresent()){
-            Member member = op.get();
-            String nickName = member.getNickname();
-            chatRoomRepository.joinRoom(message,nickName);
-        }else {
-            chatRoomRepository.joinRoom(message,"익명");
+    public void joinRoom(ChatMessageVO message, String nickname) {
+        Map<String, ChatRoomVO> rooms = chatRoomRepository.getRoomList();
+        ChatRoomVO room = rooms.get(message.getRoomId());
+        if (room == null){  // repository 에 방이 없을경우(클라이언트 측에서 방Id를 받은상태에서 서버 재시작 했을경우 등)
+            ChatRoomVO newRoom = new ChatRoomVO(message.getRoomId());
+            chatRoomRepository.addRoom(newRoom);
+            roomQueue.add(newRoom);
         }
+        chatRoomRepository.joinRoom(message,nickname);
     }
 
     @Override

@@ -25,7 +25,8 @@ public class ChatMessageController {
     // 입장 메시지 수신시
     @MessageMapping("/chat/join")
     public void join(ChatMessageVO message){
-        chatRoomService.joinRoom(message);
+        String joinerNickname = memberService.getMemberNickname(message.getWriter());
+        chatRoomService.joinRoom(message, joinerNickname);
         template.convertAndSend("/subscript/chat/room/"+message.getRoomId(),message);
     }
 
