@@ -39,3 +39,7 @@ out/
 
 ### properties ###
 application-gitignore.properties
+
+
+### macOS ###
+.DS_Store
