@@ -1,7 +1,10 @@
+import com.moowork.gradle.node.npm.NpmTask
+
 plugins {
     java
     id("org.springframework.boot") version "2.7.6"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
+    id("com.moowork.node") version "1.3.1"
 }
 
 group = "kr.tareun"
@@ -22,10 +25,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
-    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
@@ -37,3 +38,17 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+//task<NpmTask>("appNpmInstall"){
+//    setWorkingDir(file("${project.projectDir}/frontend"))
+//    setArgs(listOf("install"))
+//}
+//task<NpmTask>("npmBuild"){
+//    setWorkingDir(file("${project.projectDir}/frontend"))
+//    setArgs(listOf("run","build"))
+//}
+//task<Copy>("copyFrontToStatic") {
+//    from("/frontend/build")
+//    into("build/resources/static")
+//}
+

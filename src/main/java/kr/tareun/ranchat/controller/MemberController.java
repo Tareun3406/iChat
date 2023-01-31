@@ -7,7 +7,6 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,12 +23,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/join")
-    public ModelAndView joinFormView(){
-        return new ModelAndView("member/joinForm");
-    }
-
-    @PostMapping("/join")
+    @PostMapping("/doJoin")
     public void joinMember(MemberDTO member, HttpServletResponse response) throws IOException {
         memberService.joinMember(member);
         response.sendRedirect("http://localhost:3000/LoginForm");

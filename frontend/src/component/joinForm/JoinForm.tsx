@@ -28,7 +28,7 @@ const JoinForm = () =>{
 
 
     return(
-        <form className="login-form" method="post" action="/join" onSubmit={onSubmit}>
+        <form className="login-form" method="post" action="/doJoin" onSubmit={onSubmit}>
             <div>
                 <h2 className="form-top-title">
                     아이톡 회원가입

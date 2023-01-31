@@ -7,7 +7,8 @@ import java.util.*;
 @Getter
 public class ChatRoomVO {
     final private String roomId;
-    private Map<String, String> members = new HashMap<>();
+    private final Map<String, String> membersName = new HashMap<>();
+    private final Map<String, Boolean> membersIsOnLine = new HashMap<>();
 
 
     public ChatRoomVO() {
@@ -18,11 +19,12 @@ public class ChatRoomVO {
     }
 
     public void joinMember(String memberId, String nickname){
-        members.put(memberId, nickname);
+        membersName.put(memberId, nickname);
+        membersIsOnLine.put(memberId, true);
     }
 
     public int outMember(String memberId){
-        members.remove(memberId);
-        return members.size();
+        membersIsOnLine.put(memberId, false);
+        return membersName.size();
     }
 }

@@ -31,7 +31,7 @@ const LoginForm: FC = ()=>{
         }).then((response)=>{
             if(response.status===200){
                 navigate("/");
-            }else{
+            }else if(response.status === 401){
                 setErrorMessage(<span style={{color:"red", fontSize:"0.8em"}}>아이디 또는 비밀번호가 일치하지 않습니다.</span>);
             }
         })

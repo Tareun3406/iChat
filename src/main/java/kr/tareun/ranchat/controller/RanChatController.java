@@ -17,7 +17,7 @@ public class RanChatController {
     }
 
     // 방 매칭
-    @GetMapping("/ranChat")
+    @GetMapping("/matchRanChat")
     public ChatRoomVO ranChatRoomTest(){
         ChatRoomVO room = chatRoomService.matchRoom();
         return room;

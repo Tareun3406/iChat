@@ -22,11 +22,14 @@ class MessageVO{
 }
 class RoomInfo{
     roomId;
-    memberMap;
-    constructor(roomId: string, memberMap: string|undefined) {
+    memberNameMap;
+    memberStatus: Map<string, boolean> | undefined;
+    constructor(roomId: string, memberNameMap: string|undefined, memberStatus: string|undefined) {
         this.roomId = roomId;
-        if(memberMap !== undefined){
-            this.memberMap = new Map(Object.entries(memberMap))
+        if(memberNameMap !== undefined && memberStatus !== undefined){
+            this.memberNameMap = new Map(Object.entries(memberNameMap));
+            // @ts-ignore
+            this.memberStatus = new Map(Object.entries(memberStatus));
         }
     }
 }
@@ -96,12 +99,12 @@ const RanChat: FC = () => {
 
     // mount 했을때 한번 실행. WebSocket 통신에 사용할 채팅방 매칭
     useEffect(()=>{
-        fetch("ranChat")
+        fetch("matchRanChat")
             .then((response) => {
                 return response.json();
             })
             .then((json) =>{
-                setRoomInfo(new RoomInfo(json.roomId, undefined));
+                setRoomInfo(new RoomInfo(json.roomId, undefined, undefined));
             })
             .catch((error) => console.log("error: ", error));
     },[]);
@@ -120,7 +123,7 @@ const RanChat: FC = () => {
                         return response.json();
                     })
                     .then((json) =>{
-                        setRoomInfo(new RoomInfo(json.roomId,json.members));
+                        setRoomInfo(new RoomInfo(json.roomId,json.membersName,json.membersIsOnLine));
                     })
                     .catch((error) => console.log("error: ", error));
             }
@@ -131,8 +134,8 @@ const RanChat: FC = () => {
 
     return (
         <div className="chat-box">
-            <ChatBoxHead memberMap={roomInfo?.memberMap} userId={userId}/>
-                <MessageContainer messages={messageLog} userId={userId} memberMap={roomInfo?.memberMap}/>
+            <ChatBoxHead memberNameMap={roomInfo?.memberNameMap} userId={userId} memberStatusMap={roomInfo?.memberStatus}/>
+                <MessageContainer messages={messageLog} userId={userId} memberNameMap={roomInfo?.memberNameMap} memberStatusMap={roomInfo?.memberStatus}/>
             <div className="message-form">
                 <input className="message-input"
                        onKeyDown={(event)=>{sendOnKeyDown(event);}}

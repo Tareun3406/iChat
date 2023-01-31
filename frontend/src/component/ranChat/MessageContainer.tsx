@@ -7,20 +7,19 @@ interface Message {
     type: string;
 }
 
-interface MessageContainer {
+interface Props {
     messages: Message[] | undefined;
     userId:   string | React.Dispatch<React.SetStateAction<string | undefined>> | undefined;
-    memberMap : Map<string, string> | undefined;
+    memberNameMap : Map<string, string> | undefined;
+    memberStatusMap : Map<string, boolean> | undefined;
 }
 
-const MessageContainer: FC<MessageContainer> = (container) => {
+const MessageContainer: FC<Props> = (props) => {
 
     const bottom = useRef<HTMLLIElement>(null);
     const messageContainer = useRef<HTMLUListElement>(null);
     const isBottomMessage = useRef(true);
     const innerHeight = messageContainer.current?.offsetHeight;
-    const joinerMap = useRef(new Map<string,string>);
-
 
     const onScrollEvent = ()=>{
         const scrollTop = messageContainer.current?.scrollTop;
@@ -33,20 +32,20 @@ const MessageContainer: FC<MessageContainer> = (container) => {
             bottom.current?.scrollIntoView();
     })
 
-    const messageLog = container.messages?.map((message, index) => {
+    const messageLog = props.messages?.map((message, index) => {
         let className: string;  // li 태그에 들어갈 클래스명
         switch (message.type){
             case "memberIn":
-                if (joinerMap.current.get(message.writer) === undefined)
-                    joinerMap.current.set(message.writer, container.memberMap?.get(message.writer) as string)
-                className = "message-system";
-                return (
-                    <li key={index} className={className}>{joinerMap.current.get(message.writer)}{message.message}</li>
-                )
+                // if (joinerMap.current.get(message.writer) === undefined)
+                //     joinerMap.current.set(message.writer, container.memberMap?.get(message.writer) as string)
+                // className = "message-system";
+                // return (
+                //     <li key={index} className={className}>{joinerMap.current.get(message.writer)}{message.message}</li>
+                // )
             case "memberOut":
                 className = "message-system";
                 return (
-                    <li key={index} className={className}>{joinerMap.current.get(message.writer)}{message.message}</li>
+                    <li key={index} className={className}>{props.memberNameMap?.get(message.writer)}{message.message}</li>
                 )
             case "system" :
                 className = "message-system";
@@ -54,7 +53,7 @@ const MessageContainer: FC<MessageContainer> = (container) => {
                     <li key={index} className={className}>{message.message}</li>
                 )
             case "message" :
-                if(message.writer === container.userId) className = "chat-message-send"; // 보낸 메세지
+                if(message.writer === props.userId) className = "chat-message-send"; // 보낸 메세지
                 else className = "chat-message-receive";// 받은 메세지
                 return (
                     <li key={index} className={className}>{message.message}</li>
