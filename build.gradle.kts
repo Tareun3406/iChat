@@ -39,6 +39,7 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+
 //task<NpmTask>("appNpmInstall"){
 //    setWorkingDir(file("${project.projectDir}/frontend"))
 //    setArgs(listOf("install"))

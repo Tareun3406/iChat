@@ -19,15 +19,13 @@ public class RanChatController {
     // 방 매칭
     @GetMapping("/matchRanChat")
     public ChatRoomVO ranChatRoomTest(){
-        ChatRoomVO room = chatRoomService.matchRoom();
-        return room;
+        return chatRoomService.matchRoom();
     }
 
     // 방 정보
     @GetMapping("/getRoomInfo")
     public ChatRoomVO getRoomInfo(String roomId){
-        ChatRoomVO room = chatRoomService.getRoomInfo(roomId);
-        return room;
+        return chatRoomService.getRoomInfo(roomId);
     }
 
 }

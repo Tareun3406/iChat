@@ -26,13 +26,12 @@ public class MemberController {
     @PostMapping("/doJoin")
     public void joinMember(MemberDTO member, HttpServletResponse response) throws IOException {
         memberService.joinMember(member);
-        response.sendRedirect("http://localhost:3000/LoginForm");
+        response.sendRedirect("http://localhost:8080/LoginForm");
     }
 
     @GetMapping("/getIsValidEmail")
     public boolean getIsValidEmail(String username){
-        boolean isValid = memberService.getIsValidEmail(username);
-        return isValid;
+        return memberService.getIsValidEmail(username);
     }
 
     @GetMapping("/getLoginMember")
