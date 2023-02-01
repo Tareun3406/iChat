@@ -23,8 +23,13 @@ public class ChatRoomVO {
         membersIsOnLine.put(memberId, true);
     }
 
-    public int outMember(String memberId){
+    public boolean outMember(String memberId){
         membersIsOnLine.put(memberId, false);
-        return membersName.size();
+        boolean isRemaining = membersIsOnLine.containsValue(true);
+        if (!isRemaining){
+            membersName.clear();
+            membersIsOnLine.clear();
+        }
+        return isRemaining;
     }
 }

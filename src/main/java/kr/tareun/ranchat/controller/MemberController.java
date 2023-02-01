@@ -26,7 +26,7 @@ public class MemberController {
     @PostMapping("/doJoin")
     public void joinMember(MemberDTO member, HttpServletResponse response) throws IOException {
         memberService.joinMember(member);
-        response.sendRedirect("http://localhost:8080/LoginForm");
+        response.sendRedirect("http://ranchat.kr:8080/LoginForm");
     }
 
     @GetMapping("/getIsValidEmail")

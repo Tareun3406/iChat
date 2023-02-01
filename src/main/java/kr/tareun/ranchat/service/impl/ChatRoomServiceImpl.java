@@ -52,7 +52,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Override
     public void outRoom(ChatMessageVO message) {
-        chatRoomRepository.outRoom(message);
+        Map<String, ChatRoomVO> rooms = chatRoomRepository.getRoomList();
+        ChatRoomVO room = rooms.get(message.getRoomId());
+        if (room != null){  // repository 에 방이 없을경우(클라이언트 측에서 방Id를 받은상태에서 서버 재시작 했을경우 등)
+            chatRoomRepository.outRoom(message);
+        }
     }
 
     @Override

@@ -43,8 +43,8 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     public void outRoom(ChatMessageVO message){
         String outer = message.getWriter();
         String roomId = message.getRoomId();
-        int remaining = rooms.get(roomId).outMember(outer);
-        if(remaining == 0){
+        boolean noMember = rooms.get(roomId).outMember(outer);
+        if(!noMember){
             rooms.remove(roomId);   // 남은 인원이 없을경우 채팅방 목록에서 삭제
         }
     }
