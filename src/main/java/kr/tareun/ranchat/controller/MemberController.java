@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +32,7 @@ public class MemberController {
 
     @GetMapping("/getIsValidEmail")
     public boolean getIsValidEmail(String username){
-        return memberService.getIsValidEmail(username);
+        return memberService.getIsInValidEmail(username);
     }
 
     @GetMapping("/getLoginMember")
@@ -40,6 +41,15 @@ public class MemberController {
             return "Guest"+session.getId();
         }
         return principal.getName();
+    }
+
+    @PostMapping("/findPw")
+    public void findPW(HttpServletResponse response,@RequestBody MemberDTO member){
+        String username = member.getUsername();
+        if (!memberService.getIsInValidEmail(username)){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }else
+            memberService.sendFindPwMail(username);
     }
 
     @GetMapping("/getCsrfTk")

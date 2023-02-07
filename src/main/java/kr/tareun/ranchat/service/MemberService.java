@@ -7,5 +7,7 @@ public interface MemberService {
 
     public String getMemberNickname(String username);
 
-    boolean getIsValidEmail(String username);
+    boolean getIsInValidEmail(String username);
+
+    boolean sendFindPwMail(String username);
 }
