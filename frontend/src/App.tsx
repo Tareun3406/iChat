@@ -6,6 +6,7 @@ import RanChat from "./component/ranChat/RanChat";
 import JoinForm from "./component/joinForm/JoinForm";
 import LoginForm from "./component/login/LoginForm";
 import SearchPw from "./component/SearchPW/SearchPw";
+import EmailCertify from "./component/Certify/EmailCertify";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/JoinForm" element={<JoinForm />}/>
           <Route path="/LoginForm" element={<LoginForm />}/>
           <Route path="/SearchPW" element={<SearchPw />}/>
+          <Route path="/EmailCertify" element={<EmailCertify />}/>
         </Routes>
     </div>
   );

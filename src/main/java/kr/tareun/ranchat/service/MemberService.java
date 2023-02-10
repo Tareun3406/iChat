@@ -10,4 +10,6 @@ public interface MemberService {
     boolean getIsInValidEmail(String username);
 
     boolean sendFindPwMail(String username);
+
+    void emailCertify(String username, String uid);
 }

@@ -75,7 +75,7 @@ const RanChat: FC = () => {
     // Stomp 클라이언트 생성
     const client = useRef(new Client({
         webSocketFactory: ()=>{
-            return new Sock('http://ranchat.kr:8080/ranChatWs') as IStompSocket;
+            return new Sock('http://localhost:8080/ranChatWs') as IStompSocket;
         },
         // debug: function (str) {
         //     console.log(str);

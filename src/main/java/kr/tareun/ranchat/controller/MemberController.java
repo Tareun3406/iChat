@@ -3,11 +3,9 @@ package kr.tareun.ranchat.controller;
 import kr.tareun.ranchat.model.dto.MemberDTO;
 import kr.tareun.ranchat.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -50,6 +48,12 @@ public class MemberController {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }else
             memberService.sendFindPwMail(username);
+    }
+
+    @PatchMapping("/emailCertify")
+    public void emailCertify(@RequestBody MemberDTO member){
+        System.out.println(member);
+        memberService.emailCertify(member.getUsername(), member.getUid());
     }
 
     @GetMapping("/getCsrfTk")

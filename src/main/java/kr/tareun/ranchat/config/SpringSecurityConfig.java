@@ -34,6 +34,9 @@ public class SpringSecurityConfig{
         http.authorizeRequests();
         http.cors();
 
+        // csrf 체크 제외
+        http.csrf().ignoringAntMatchers("/emailCertify");
+
         //비회원 세션관리
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
 

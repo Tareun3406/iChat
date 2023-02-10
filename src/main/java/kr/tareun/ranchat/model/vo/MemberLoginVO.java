@@ -15,6 +15,7 @@ public class MemberLoginVO implements UserDetails {
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> auths;
+    private boolean isCertified = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -25,11 +26,14 @@ public class MemberLoginVO implements UserDetails {
         username = entity.getUsername();
         password = entity.getPassword();
         auths = entity.getAuths();
+        isCertified = entity.isCertified();
+        System.out.println(isCertified);
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        System.out.println(isCertified);
+        return isCertified;
     }
 
     @Override
@@ -44,6 +48,6 @@ public class MemberLoginVO implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isCertified;
     }
 }
