@@ -9,7 +9,9 @@ const Home: React.FC = () => {
   const [userId,setUserId] = GetUserId();
   const [csrf, setCsrf] = useState<string>("");
 
-
+  const titleMenuStyle: React.CSSProperties = {
+    display:"block", fontSize:"1.5rem", margin:"1em"
+  };
 
   const logout = ()=>{
     if (csrf !== undefined)
@@ -34,27 +36,31 @@ const Home: React.FC = () => {
   useEffect(() =>{
     if (userId?.toString().substring(0,5) ==='Guest'){
       setLink(
-          <div>
-            <Link to="/RanChat" className="menu-button"> '익명'으로 시작</Link>
-            <Link to="/LoginForm" className="menu-button">로그인</Link>
-            <Link to="/JoinForm" className="menu-button">회원가입</Link>
-          </div>
+          <>
+            <Link to="/RanChat" className="btn btn-lg btn-primary"
+                  style={titleMenuStyle}> '익명'으로 시작</Link>
+            <Link to="/LoginForm" className="btn btn-lg btn-primary"
+                  style={titleMenuStyle}>로그인</Link>
+            <Link to="/JoinForm" className="btn btn-lg btn-primary"
+                  style={titleMenuStyle}>회원가입</Link>
+          </>
       )
     }
     else{
       setLink(
-      <form>
-        <Link to="/RanChat" className="menu-button"> 시작하기</Link>
-        <a className="menu-button" onClick={logout}>로그아웃</a>
-      </form>)
+      <>
+        <Link to="/RanChat" className="btn btn-lg btn-primary"
+              style={titleMenuStyle}> 시작하기</Link>
+        <a className="btn btn-lg btn-primary"
+           style={titleMenuStyle} onClick={logout}>로그아웃</a>
+      </>)
     }
   },[userId])
 
-  return (<div className="home">
+  return (
     <div className="main-menu">
-      <p className="title">아이톡</p>
+      <h1 style={{fontSize:"8rem"}}>아이톡</h1>
       {link}
-    </div>
   </div>);
 }
 

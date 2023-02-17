@@ -8,7 +8,6 @@ import LoginForm from "./component/login/LoginForm";
 import SearchPw from "./component/SearchPW/SearchPw";
 import EmailCertify from "./component/Certify/EmailCertify";
 
-
 function App() {
   return (
     <div className="App">
