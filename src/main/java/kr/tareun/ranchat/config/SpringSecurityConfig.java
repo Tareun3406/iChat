@@ -56,6 +56,7 @@ public class SpringSecurityConfig{
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin("http://ranchat.kr:8080/");
+        configuration.addAllowedOrigin("http://localhost:3000/");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);

@@ -5,11 +5,14 @@ const GetUserId: any = ()=>{
     useEffect(()=>{
         fetch("/getLoginMember")
             .then((response)=>{
-                return response.text();
+                if (response.ok)
+                    return response.text();
+                else
+                    return "Guest로 진행됩니다.(연결 실패)"
             })
             .then((text)=>{
-                    setUserId(text);
-            })
+                setUserId(text);
+            });
     },[]);
     return [userId,setUserId];
 };

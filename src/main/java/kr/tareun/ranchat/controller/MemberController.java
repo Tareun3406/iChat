@@ -3,7 +3,6 @@ package kr.tareun.ranchat.controller;
 import kr.tareun.ranchat.model.dto.MemberDTO;
 import kr.tareun.ranchat.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +51,6 @@ public class MemberController {
 
     @PatchMapping("/emailCertify")
     public void emailCertify(@RequestBody MemberDTO member){
-        System.out.println(member);
         memberService.emailCertify(member.getUsername(), member.getUid());
     }
 

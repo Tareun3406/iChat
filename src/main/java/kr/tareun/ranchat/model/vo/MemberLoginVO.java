@@ -27,13 +27,11 @@ public class MemberLoginVO implements UserDetails {
         password = entity.getPassword();
         auths = entity.getAuths();
         isCertified = entity.isCertified();
-        System.out.println(isCertified);
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        System.out.println(isCertified);
-        return isCertified;
+        return true;
     }
 
     @Override
