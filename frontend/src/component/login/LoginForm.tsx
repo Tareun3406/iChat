@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from "react";
+import React, {CSSProperties, FC, useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import CsrfToken from "../util/CsrfToken";
 
@@ -10,6 +10,13 @@ const LoginForm: FC = ()=>{
     const pwInput = useRef<HTMLInputElement>(null);
     const [csrf, setCsrf] = useState<string>("");
 
+    const style_HelpLink: CSSProperties = {
+        display: "inline-block",
+        fontSize: "1rem",
+        margin: "0rem 1rem",
+        width: "10rem",
+        textDecoration: "none",
+    }
 
     useEffect(() => {
             CsrfToken(setCsrf)
@@ -44,32 +51,28 @@ const LoginForm: FC = ()=>{
         }
     }
     return (
-        <form className="login-form">
-            <div>
-                <h2 className="form-top-title">아이톡 로그인</h2>
+        <form>
+            <h2>아이톡 로그인</h2>
+            <div className="form-floating mb-3">
+                <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"
+                       name="username" ref={emailInput}
+                       onKeyDown={(event)=>{onKeyDown(event)}}/>
+                <label htmlFor="floatingInput">Email address</label>
             </div>
-            <div className="form-tag">
-                <p className="tag-name">아이디</p>
-                <div className="form-input-back">
-                    <input type="text" name="username" className="form-input" ref={emailInput}
-                           onKeyDown={(event)=>{onKeyDown(event)}}/>
-                </div>
-            </div>
-            <div className="form-tag">
-                <p className="tag-name">비밀번호</p>
-                <div className="form-input-back">
-                    <input type="password" name="password" className="form-input" ref={pwInput}
-                           onKeyDown={(event)=>{onKeyDown(event)}}/>
-                </div>
+            <div className="form-floating">
+                <input type="password" className="form-control" id="floatingPassword" placeholder="Password"
+                       name="password" ref={pwInput}
+                       onKeyDown={(event)=>{onKeyDown(event)}}/>
+                <label htmlFor="floatingPassword">Password</label>
             </div>
             <div>
                 {errorMessage}
             </div>
             <div>
-                <button type="button" className="login-button" onClick={onLoginBtn}>로그인</button>
+                <button type="button" className="btn btn-primary" style={{display:"block", margin:"0.5rem 0", width:"100%"}} onClick={onLoginBtn}>로그인</button>
                 <div style={{margin:'auto'}}>
-                    <Link className="help-link" to="/JoinForm">회원가입</Link>
-                    <Link className="help-link" to="/SearchPW">비밀번호 찾기</Link>
+                    <Link style={style_HelpLink} to="/JoinForm">회원가입</Link>
+                    <Link style={style_HelpLink} to="/SearchPW">비밀번호 찾기</Link>
                 </div>
             </div>
         </form>
