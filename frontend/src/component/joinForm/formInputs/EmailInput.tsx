@@ -1,4 +1,5 @@
 import React, {MutableRefObject, useEffect, useState} from "react";
+import {Button} from "react-bootstrap";
 
 interface props{
     isValidEmail: MutableRefObject<boolean>;
@@ -7,46 +8,65 @@ const EmailValidMessage = (props: props)=>{
 
     const expEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+$/;
     const [emailValue, setEmailValue] = useState("");
-    const [emailValidMsg,setEmailValidMsg] = useState(<span style={{color:"red"}}></span>);
+    const [cssIsValid, setCssIsValid] = useState("");
+    const [validMsg,setValidMsg] = useState("");
+    const [inValidMsg,setInValidMsg] = useState("");
+    const [needCheckMsg,setNeedCheckMsg] = useState("");
+
+    const [blankDivCss, setBlankDivCss] = useState({height:"1.75rem"});
 
     const emailDoubleCheck = ()=>{
-        fetch("/getIsValidEmail?username="+emailValue).then((response)=>{
-            return response.text()
-        }).then((text)=>{
-            if(text === "true"){
-                setEmailValidMsg(<span style={{color:"red"}}>중복 이메일입니다. 다른 이메일을 사용해주세요.</span>)
-                props.isValidEmail.current = false;
-            }else{
-                setEmailValidMsg(<span style={{color:"blue"}}>사용 가능한 이메일입니다.</span>)
-                props.isValidEmail.current = true;
-            }
-        })
+        if(expEmail.test(emailValue)){
+            fetch("/getIsValidEmail?username="+emailValue).then((response)=>{
+                return response.text()
+            }).then((text)=>{
+                if(text === "true"){
+                    setCssIsValid("is-invalid");
+                    setInValidMsg("중복 이메일입니다. 다른 이메일을 사용해주세요.");
+                    props.isValidEmail.current = true;
+                }else{
+                    setCssIsValid("is-valid");
+                    setValidMsg("사용 가능한 이메일입니다.");
+                    setNeedCheckMsg("");
+                    props.isValidEmail.current = false;
+                }
+            });
+        }
     }
     useEffect(()=>{
-        if (emailValue !== ""){
-            if(expEmail.test(emailValue)){
-                setEmailValidMsg(<span style={{color:"blue"}}>사용 가능합니다. 중복확인 버튼을 눌러주세요.</span>)
-                props.isValidEmail.current = false;
-            }else {
-                setEmailValidMsg(<span style={{color: "red"}}>올바른 이메일 주소를 입력해주세요.</span>)
-                props.isValidEmail.current = false;
-            }
+        if (emailValue === ""){
+            setCssIsValid("");
+            setBlankDivCss({height: "1.75rem"});
+            props.isValidEmail.current = false;
+        }else if(expEmail.test(emailValue)){
+            setCssIsValid("is-valid");
+            setValidMsg("사용 가능한 이메일입니다.");
+            setNeedCheckMsg("중복확인 버튼을 눌러주세요.")
+            setBlankDivCss({height: "0"});
+            props.isValidEmail.current = false;
+        }else {
+            setCssIsValid("is-invalid");
+            setInValidMsg("올바른 이메일 주소를 입력해주세요.");
+            setBlankDivCss({height: "0"});
+            props.isValidEmail.current = false;
         }
     },[emailValue])
 
     return(
-        <div style={{position:"relative"}}>
-            <div className="form-tag">
-                <p className="tag-name">이메일</p>
-                <div className="form-input-back">
-                    <input type="text" name="username" className="form-input" placeholder="ex) anno123@google.com"
-                           value={emailValue} onChange={(event)=>{setEmailValue(event.target.value)}}/>
-                </div>
-                <button type="button" className="email-check-btn" onClick={emailDoubleCheck}>중복확인</button>
+        <div style={{position:"relative", margin:"0 3rem"}}>
+            <label className="form-label mt-4 text-start" htmlFor="EmailForm" style={{fontSize:"1.2rem"}}>Email</label>
+            <input type="text" name="username" placeholder="ex) anno123@google.com" className={"form-control "+ cssIsValid} id="EmailForm"
+                   value={emailValue} onChange={(event)=>{setEmailValue(event.target.value)}}
+                   style={{width:"20rem"}}/>
+
+            <button type="button" className="btn btn-primary" onClick={emailDoubleCheck}
+                    style={{position:"absolute",top:"3.8rem", right:"-6.8rem",
+                        borderTopLeftRadius:"15rem", borderBottomLeftRadius:"15rem"}}>중복확인</button>
+            <div className="invalid-feedback" style={{fontSize:"1rem"}}>{inValidMsg}</div>
+            <div className="valid-feedback"  style={{fontSize:"1rem"}}>{validMsg}
+                <span style={{fontWeight:"bold", color:"#e52527"}}>{needCheckMsg}</span>
             </div>
-            <div className="validation-message">
-                {emailValidMsg}
-            </div>
+            <div style={blankDivCss}/>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import React, {FormEvent, useEffect, useRef, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import EmailInput from "./formInputs/EmailInput";
 import NicknameInput from "./formInputs/NicknameInput";
 import PwInput from "./formInputs/PwInput";
@@ -28,20 +28,17 @@ const JoinForm = () =>{
 
 
     return(
-        <form className="login-form" method="post" action="/doJoin" onSubmit={onSubmit}>
-            <div>
-                <h2 className="form-top-title">
-                    아이톡 회원가입
-                </h2>
-            </div>
+        <form className="text-start" method="post" action="/doJoin" onSubmit={onSubmit}>
+            <h1 className="text-center">아이톡 회원가입</h1>
             <input type="hidden" value={csrf} name="_csrf"/>
+
             <EmailInput isValidEmail={isValidEmail}/>
             <NicknameInput isValidNickname={isValidNickname}/>
             <PwInput isValidPwInput={isValidPw} isValidPwCheck={isValidPwCheck} />
 
-            <div>
-                <button type="button" className="help-link" onClick={ ()=>navigate(-1) }> 뒤로가기 </button>
-                <button className="help-link">회원가입 하기</button>
+            <div className="mt-2">
+                <a className="btn btn-primary btn-sm" onClick={ ()=>navigate(-1) }>뒤로가기</a>
+                <button className="btn btn-primary btn-sm" style={{float:"right"}}>회원가입 하기</button>
             </div>
         </form>
     )

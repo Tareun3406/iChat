@@ -7,9 +7,13 @@ const NicknameInput= (props:props)=>{
     const invalidValues = ["관리", "GM", "gm", "Gm", "운영", "admin", "Admin", "ADMIN"]; // 사칭 방지
     const exp = /^[가-힣A-Za-z0-9]{3,10}$/;
     const [nickNameValue, setNickNameValue] = useState("");
-    const [nickNameValidMsg,setNickNameValidMsg] = useState(<span style={{color:"red"}}></span>);
+    const [cssIsValid, setCssIsValid] = useState("");
+
+    const [blankDivCss, setBlankDivCss] = useState({height:"1.75rem"});
+
 
     useEffect(()=>{
+
         if(nickNameValue !== ""){
             let isInvalid = false;
             if(exp.test(nickNameValue)){
@@ -21,29 +25,30 @@ const NicknameInput= (props:props)=>{
                 });
             }else isInvalid = true;
             if (isInvalid){
-                setNickNameValidMsg(<span style={{color:"red"}}>사용할 수 없습니다. 다른 닉네임을 사용해 주세요.</span> )
+                setCssIsValid("is-invalid");
+                setBlankDivCss({height: "0"});
                 props.isValidNickname.current = false;
             }
-
             else {
-                setNickNameValidMsg(<span style={{color: "blue"}}>사용 가능한 닉네임입니다.</span>)
+                setCssIsValid("is-valid");
+                setBlankDivCss({height: "0"});
                 props.isValidNickname.current = true;
             }
+        }else {
+            setCssIsValid("");
+            setBlankDivCss({height: "1.75rem"});
+            props.isValidNickname.current = false;
         }
     },[nickNameValue]);
 
     return(
-        <div>
-            <div className="form-tag">
-                <p className="tag-name">닉네임</p>
-                <div className="form-input-back">
-                    <input type="text" name="nickname" className="form-input" placeholder="한/영,숫자만 사용가능(3자이상)"
-                    value={nickNameValue} onChange={(event)=>{setNickNameValue(event.target.value)}}/>
-                </div>
-            </div>
-            <div className="validation-message">
-                {nickNameValidMsg}
-            </div>
+        <div style={{margin:"0 3rem"}}>
+            <label className="form-label mt-1 text-start" htmlFor="nicknameForm" style={{fontSize:"1.2rem"}}>닉네임</label>
+            <input type="text" name="nickname" placeholder="한/영,숫자만 사용가능(3~10자)" className={"form-control "+cssIsValid} id="nicknameForm"
+                   value={nickNameValue} onChange={(event)=>{setNickNameValue(event.target.value)}}/>
+            <div className="invalid-feedback" style={{fontSize:"1rem"}}>사용할 수 없습니다. 다른 닉네임을 사용해 주세요.</div>
+            <div className="valid-feedback"  style={{fontSize:"1rem"}}>사용 가능한 닉네임입니다.</div>
+            <div style={blankDivCss}/>
         </div>
     )
 }
