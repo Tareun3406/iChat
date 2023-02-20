@@ -1,5 +1,5 @@
 import React, {FormEvent, useEffect, useRef, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import EmailInput from "./formInputs/EmailInput";
 import NicknameInput from "./formInputs/NicknameInput";
 import PwInput from "./formInputs/PwInput";
