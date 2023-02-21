@@ -6,7 +6,7 @@ interface props{
 }
 const PwInput = (props: props)=>{
 
-    const exp = /^[a-zA-Z0-9~!@#$%^&*()]{8,24}$/
+    const exp = /^[a-zA-Z0-9~!@#$%^&*()]{8,32}$/
     const [pwValue, setPwValue] = useState("");
     const [pwCheckValue, setPwCheckValue] = useState("");
 
@@ -60,16 +60,16 @@ const PwInput = (props: props)=>{
 
     return(
         <>
-            <div style={{margin:"0 3rem"}}>
+            <div>
                 <label className="form-label mt-1 text-start" htmlFor="pwForm" style={{fontSize:"1.2rem"}}>비밀번호</label>
-                <input type="password" name="password" placeholder="8~24자의 영문,숫자,특문" className={"form-control "+cssPwIsValid} id="pwForm"
-                       value={pwValue} onChange={(event)=>{setPwValue(event.target.value)}}/>
+                <input type="password" name="password" placeholder="8~32자의 영문,숫자,특문" className={"form-control "+cssPwIsValid} id="pwForm"
+                       value={pwValue} onChange={(event)=>{setPwValue(event.target.value)}} />
                 <div className="invalid-feedback" style={{fontSize:"1rem"}}>사용할 수 없는 비밀번호 입니다.</div>
                 <div className="valid-feedback"  style={{fontSize:"1rem"}}>사용가능한 비밀번호 입니다.</div>
                 <div style={pwBlankDivCss}/>
             </div>
 
-            <div style={{margin:"0 3rem"}}>
+            <div>
                 <label className="form-label mt-1 text-start" htmlFor="pwCheckForm" style={{fontSize:"1.2rem"}}>비밀번호 확인</label>
                 <input type="password" name="pwCheck" placeholder="비밀번호를 다시 입력해주세요." className={"form-control "+cssPwCheckIsValid} id="pwCheckForm"
                        value={pwCheckValue} onChange={(event)=>{setPwCheckValue(event.target.value)}}/>

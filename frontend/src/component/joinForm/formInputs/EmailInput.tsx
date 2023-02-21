@@ -52,15 +52,15 @@ const EmailValidMessage = (props: props)=>{
     },[emailValue])
 
     return(
-        <div style={{position:"relative", margin:"0 3rem"}}>
+        <div>
             <label className="form-label mt-4 text-start" htmlFor="EmailForm" style={{fontSize:"1.2rem"}}>Email</label>
-            <input type="text" name="username" placeholder="ex) anno123@google.com" className={"form-control "+ cssIsValid} id="EmailForm"
-                   value={emailValue} onChange={(event)=>{setEmailValue(event.target.value)}}
-                   style={{width:"20rem"}}/>
-
-            <button type="button" className="btn btn-primary" onClick={emailDoubleCheck}
-                    style={{position:"absolute",top:"3.8rem", right:"-6.8rem",
-                        borderTopLeftRadius:"15rem", borderBottomLeftRadius:"15rem"}}>중복확인</button>
+            <div style={{width:"max-content"}}>
+                <input type="text" name="username" placeholder="ex) anno123@google.com" className={"form-control "+ cssIsValid} id="EmailForm"
+                       value={emailValue} onChange={(event)=>{setEmailValue(event.target.value)}}
+                       style={{width:"20rem", display:"inline-block"}}/>
+                <button type="button" className="btn btn-primary" onClick={emailDoubleCheck}
+                        style={{borderTopLeftRadius:"15rem", borderBottomLeftRadius:"15rem", width:"7rem"}}>중복확인</button>
+            </div>
             <div className="invalid-feedback" style={{fontSize:"1rem"}}>{inValidMsg}</div>
             <div className="valid-feedback"  style={{fontSize:"1rem"}}>{validMsg}
                 <span style={{fontWeight:"bold", color:"#e52527"}}>{needCheckMsg}</span>
