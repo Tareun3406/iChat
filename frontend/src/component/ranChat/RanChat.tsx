@@ -1,11 +1,9 @@
-import React, {FC, useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, FC, useEffect, useRef, useState} from "react";
 import Sock from 'sockjs-client';
 import {Client, IStompSocket} from "@stomp/stompjs";
 import useDidMountEffect from '../util/useDidMountEffect';
 import MessageContainer from "./MessageContainer";
 import GetUserId from "../util/GetUserId";
-import {Simulate} from "react-dom/test-utils";
-import input = Simulate.input;
 import ChatBoxHead from "./ChatBoxHead";
 
 class MessageVO{
@@ -39,7 +37,25 @@ const RanChat: FC = () => {
     const [userId,setUserId] = GetUserId();
     const [messageLog, setMessageLog] = useState<MessageVO[]>();
     const [received, setReceived] = useState<MessageVO>();
-    const messageInput = useRef<HTMLInputElement>(null);
+    const [messageInputText, setMessageInputText] = useState("");
+    const [onSend, setOnSend] = useState(true);
+
+
+    const bottom = useRef<HTMLDivElement>(null);
+    const isBottomMessage = useRef(true);
+    const messageContainer = useRef<HTMLDivElement>(null);
+    const innerHeight = messageContainer.current?.offsetHeight;
+
+    const onScrollEvent = ()=>{
+        const scrollTop = messageContainer.current?.scrollTop;
+        if (scrollTop !== undefined && innerHeight !== undefined){
+            isBottomMessage.current = scrollTop + innerHeight === messageContainer.current?.scrollHeight;
+        }
+    };
+    useEffect(()=>{
+        if(isBottomMessage)
+            bottom.current?.scrollIntoView();
+    })
 
 
     // 페이지 변경시 실행할 함수.(연결종료, 퇴장 메시지 송출)
@@ -53,7 +69,7 @@ const RanChat: FC = () => {
         window.removeEventListener("popstate",onBeforeUnload);
     }
     // 메세지 보내기 함수
-    const sendOnKeyDown = (event: React.KeyboardEvent<HTMLInputElement>)=>{
+    const sendOnKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>)=>{
         if (event.shiftKey) return;
         if(event.key==="Enter"){
             if (!event.nativeEvent.isComposing){
@@ -63,14 +79,26 @@ const RanChat: FC = () => {
         return;
     }
     const send = ()=>{
-        if(messageInput.current !== null){
+        const sendText = messageInputText.trim();
+        if(sendText !== ""){
             client.current.publish({
                 destination:'/publish/chat/message',
-                body:JSON.stringify({roomId: roomInfo?.roomId, message:messageInput.current.value , writer:userId, type:"message"})
+                body:JSON.stringify({roomId: roomInfo?.roomId, message: sendText , writer:userId, type:"message"})
             });
-            messageInput.current.value="";
         }
+        if (onSend === true)
+            setOnSend(false);
+        else
+            setOnSend(true);
+        setMessageInputText("");
     };
+    const onChangeMessage= (event: ChangeEvent<HTMLTextAreaElement>)=>{
+        const trimedText = event.target.value.trim();
+        if (trimedText !== "")
+            setMessageInputText(event.target.value);
+        else
+            setMessageInputText("");
+    }
 
     // Stomp 클라이언트 생성
     const client = useRef(new Client({
@@ -133,15 +161,30 @@ const RanChat: FC = () => {
     },[received]);
 
     return (
-        <div className="chat-box">
-            <ChatBoxHead memberNameMap={roomInfo?.memberNameMap} userId={userId} memberStatusMap={roomInfo?.memberStatus}/>
-                <MessageContainer messages={messageLog} userId={userId} memberNameMap={roomInfo?.memberNameMap} memberStatusMap={roomInfo?.memberStatus}/>
-            <div className="message-form">
-                <input className="message-input"
-                       onKeyDown={(event)=>{sendOnKeyDown(event);}}
-                       ref={messageInput}
-                />
-                <button type="button" className="send-button" onClick={send}>보내기</button>
+        <div style={{height:"-moz-max-content"}}>
+            <div className="card mb-3">
+                <ChatBoxHead memberNameMap={roomInfo?.memberNameMap} userId={userId} memberStatusMap={roomInfo?.memberStatus}/>
+
+                <div className="card-body" style={{overflowY:"scroll", height:"55vh", minHeight:"20rem"}} ref={messageContainer} onScroll={(event) => onScrollEvent()}>
+                    <MessageContainer messages={messageLog} userId={userId} memberNameMap={roomInfo?.memberNameMap} memberStatusMap={roomInfo?.memberStatus}/>
+                    <div ref={bottom} style={{clear:"both"}}/>
+                </div>
+
+
+                <ul className="list-group">
+                    <li className="list-group-item">
+                        <label htmlFor="exampleTextarea" className="form-label mt-1">크롬에서 같은 구글 계정으로 접속할경우 동일한 사용자로 인식됩니다.</label>
+                        <div className="form-group">
+                            <textarea className="form-control" id="exampleTextarea" rows={3}
+                                      onKeyDown={(event)=>{sendOnKeyDown(event);}}
+                                      onChange={(event)=>{onChangeMessage(event);}}
+                                      value={messageInputText}></textarea>
+                        </div>
+                    </li>
+                </ul>
+                <div className="card-footer pt-0">
+                    <button type="button" className="btn btn-primary btn-sm" style={{float:"right", marginRight:"1rem"}} onClick={send}>보내기</button>
+                </div>
             </div>
         </div>
     );

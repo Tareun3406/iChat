@@ -10,22 +10,15 @@ const ChatBoxHead: FC<MemberInfo> = (memberInfo)=>{
     if(memberInfo.memberNameMap !== undefined){
         for (let member of memberInfo.memberNameMap.keys()){
             if(member !== memberInfo.userId && memberInfo.memberStatusMap?.get(member) === true){
-                return(
-                    <div className="chat-box-head">
-                        <span style={{color:'#4ab0d0'}}>{memberInfo.memberNameMap.get(member)}</span>
-                        님과 대화 중
-                    </div>)
-            }else if(memberInfo.memberStatusMap?.get(member) === false){
-                return (
-                    <div className="chat-box-head">
-                        <span style={{color:'#4ab0d0'}}>대화가 종료 되었습니다.</span>
-                    </div>
-                )
+                return(<h4  className="card-header" style={{color:'#4ab0d0'}}>{memberInfo.memberNameMap.get(member)} 님과 대화 중</h4>)
+            }
+            else if(memberInfo.memberStatusMap?.get(member) === false){
+                return (<h4 className="card-header" style={{color:'#4ab0d0'}}>대화가 종료 되었습니다.</h4>)
             }
         }
     }
 
-    return(<div className="chat-box-head">대화 상대를 기다리는 중</div>);
+    return(<h4 className="card-header">대화 상대를 기다리는 중...</h4>);
 }
 
 export default ChatBoxHead;
