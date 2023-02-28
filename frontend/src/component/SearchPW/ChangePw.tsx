@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
+import queryString from "query-string";
+import {useNavigate} from "react-router-dom";
 
 const ChangePw = ()=>{
+    const navigate = useNavigate();
 
     const exp = /^[a-zA-Z0-9~!@#$%^&*()]{8,32}$/
     const [pwValue, setPwValue] = useState("");
@@ -15,7 +18,8 @@ const ChangePw = ()=>{
     const [isValidPwInput, setIsValidPwInput] = useState<boolean>(false);
     const [isValidPwCheck, setIsValidPwCheck] = useState<boolean>(false);
 
-
+    const [responseMsg, setResponseMsg] = useState<string>("");
+    const query = queryString.parse(window.location.search);
 
     useEffect(()=>{
         if(pwValue !== ""){
@@ -58,18 +62,20 @@ const ChangePw = ()=>{
 
 
     const onClick = ()=>{
-        // fetch("/findPw",{
-        //     method:"POST",
-        //     headers: {'Content-Type': 'application/json'},
-        //     body:JSON.stringify({username:emailForm.current?.value})
-        // }).then((response)=>{
-        //     if(response.status === 200){
-        //         setValidCss("is-valid")
-        //         setValidMessage("해당 이메일로 비밀번호 변경 링크를 발송했습니다.")
-        //     }else(
-        //         setValidCss("is-invalid")
-        //     )
-        // })
+        if (isValidPwCheck && isValidPwInput){
+            setResponseMsg("서버의 응답을 기다리고 있습니다...")
+            fetch("/changePw",{
+                method:"PATCH",
+                headers: {'Content-Type': 'application/json'},
+                body:JSON.stringify({username : query.username, uid:query.uid, password:pwValue})
+            }).then((response)=>{
+                if(response.status === 200){
+                    navigate("/login");
+                }else
+                    setResponseMsg("링크 정보가 만료되었습니다. 비밀번호 찾기를 처음부터 다시 시도해 주세요.");
+            })
+        }else
+            setResponseMsg("입력 내용을 다시 확인해 주세요")
     }
     return(
         <>
@@ -91,7 +97,10 @@ const ChangePw = ()=>{
                 <div style={pwCheckBlankDivCss}/>
             </div>
             <div>
-                <button type="button">비밀변호 변경하기</button>
+                <button type="button" className="btn btn-sm" onClick={onClick}>비밀변호 변경하기</button>
+                <div>
+                    {responseMsg}
+                </div>
             </div>
         </>
     )

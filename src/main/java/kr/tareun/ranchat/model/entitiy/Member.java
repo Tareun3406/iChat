@@ -1,5 +1,6 @@
 package kr.tareun.ranchat.model.entitiy;
 
+import kr.tareun.ranchat.model.dto.MemberDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,5 +32,15 @@ public class Member{
 
     public void setCertified(boolean isCertified){
         this.isCertified = isCertified;
+    }
+
+    public MemberDTO toDTO(){
+        MemberDTO result = new MemberDTO();
+        result.setUsername(username);
+        result.setPassword(password);
+        result.setNickname(nickname);
+        result.setCertified(isCertified);
+
+        return result;
     }
 }

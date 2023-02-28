@@ -6,6 +6,7 @@ import kr.tareun.ranchat.model.dto.MemberDTO;
 import kr.tareun.ranchat.model.entitiy.Auth;
 import kr.tareun.ranchat.model.entitiy.CertifyUID;
 import kr.tareun.ranchat.model.entitiy.Member;
+import kr.tareun.ranchat.model.vo.CertifyVO;
 import kr.tareun.ranchat.repository.AuthRepository;
 import kr.tareun.ranchat.repository.CertifyUIDRepository;
 import kr.tareun.ranchat.repository.MemberRepository;
@@ -68,6 +69,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public MemberDTO getMemberInfo(String username) {
+        Optional<Member> optional = memberRepository.findById(username);
+        return optional.map(Member::toDTO).orElse(null);
+    }
+
+    @Override
     public String getMemberNickname(String username) {
         Optional<Member> optional = memberRepository.findById(username);
         if(optional.isPresent()) return optional.get().getNickname();
@@ -82,16 +89,32 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public boolean sendFindPwMail(String username) {
+    public boolean sendFindPwMail(MemberDTO member) {
         String uid = UUID.randomUUID().toString();
+        CertifyUID certifyUID = CertifyUID.builder().username(member.toEntity()).uid(uid).type("PW_FIND").build();
         EmailDTO mailCont = new EmailDTO(
                 "tareun3406@gmail.com",
                 "아이톡 비밀번호 찾기",
-                "아래 링크를 통해 비밀번호를 변경해주세요.\n http://localhost:3000/linkPwFind?username="+username+"&uid="+uid,
-                username //메일을 받을 대상 이메일
+                "아래 링크를 통해 비밀번호를 변경해주세요.\n http://localhost:3000/linkPwFind?username="+member.getUsername()+"&uid="+uid,
+                member.getUsername() //메일을 받을 대상 이메일
         );
+        certifyUIDRepository.save(certifyUID);
         mailSender.send(mailCont.ToSMM());
         return true;
+    }
+
+    @Override
+    public int updatePw(String username, String pw) {
+        return memberRepository.updatePassword(username, passwordEncoder.encode(pw));
+    }
+
+    @Override
+    public CertifyVO getCertify(String username) {
+        Optional<CertifyUID> optional = certifyUIDRepository.findById(username);
+        if (optional.isPresent()){
+            return  optional.get().toVO();
+        }else
+            return null;
     }
 
     @Override
