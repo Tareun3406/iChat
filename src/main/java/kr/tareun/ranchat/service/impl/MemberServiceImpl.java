@@ -54,17 +54,17 @@ public class MemberServiceImpl implements MemberService {
         certifyUIDRepository.save(CertifyUID.builder().username(memberEntity)
                                     .uid(uid).insDate(LocalDateTime.now()).build());
 
-        // 이메일 전송
-        EmailDTO mailCont = new EmailDTO(
-                "tareun3406@gmail.com",
-                "아이톡 이메일 인증",
-                "아래 링크를 통해 이메일을 인증해주세요." +
-                        "\n http://localhost:3000/EmailCertify" +
-                        "?username="+member.getUsername()+
-                        "&uid="+uid,
-                member.getUsername()
-        );
-        mailSender.send(mailCont.ToSMM());
+//        // 이메일 전송
+//        EmailDTO mailCont = new EmailDTO(
+//                "tareun3406@gmail.com",
+//                "아이톡 이메일 인증",
+//                "아래 링크를 통해 이메일을 인증해주세요." +
+//                        "\n http://ranchat.kr:8080/EmailCertify" +
+//                        "?username="+member.getUsername()+
+//                        "&uid="+uid,
+//                member.getUsername()
+//        );
+//        mailSender.send(mailCont.ToSMM());
     }
 
     @Override
