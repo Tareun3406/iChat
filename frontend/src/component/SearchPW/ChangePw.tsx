@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from "react";
 import queryString from "query-string";
 import {useNavigate} from "react-router-dom";
+import CsrfToken from "../util/CsrfToken";
 
 const ChangePw = ()=>{
     const navigate = useNavigate();
+    const [csrf, setCsrf] = useState<string>("");
 
     const exp = /^[a-zA-Z0-9~!@#$%^&*()]{8,32}$/
     const [pwValue, setPwValue] = useState("");
@@ -60,17 +62,23 @@ const ChangePw = ()=>{
         }
     },[pwValue,pwCheckValue])
 
+    useEffect(()=>{
+        CsrfToken(setCsrf)
+    },[])
 
     const onClick = ()=>{
         if (isValidPwCheck && isValidPwInput){
             setResponseMsg("서버의 응답을 기다리고 있습니다...")
             fetch("/changePw",{
                 method:"PATCH",
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    'X-CSRF-Token': csrf,
+                    'Content-Type': 'application/json'
+                },
                 body:JSON.stringify({username : query.username, uid:query.uid, password:pwValue})
             }).then((response)=>{
                 if(response.status === 200){
-                    navigate("/login");
+                    navigate("/LoginForm");
                 }else
                     setResponseMsg("링크 정보가 만료되었습니다. 비밀번호 찾기를 처음부터 다시 시도해 주세요.");
             })

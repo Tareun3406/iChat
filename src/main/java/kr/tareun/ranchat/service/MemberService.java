@@ -1,7 +1,7 @@
 package kr.tareun.ranchat.service;
 
+import kr.tareun.ranchat.model.dto.CertifyDTO;
 import kr.tareun.ranchat.model.dto.MemberDTO;
-import kr.tareun.ranchat.model.vo.CertifyVO;
 
 public interface MemberService {
     public void joinMember(MemberDTO member);
@@ -16,7 +16,7 @@ public interface MemberService {
 
     int updatePw(String username, String pw);
 
-    CertifyVO getCertify(String username);
+    CertifyDTO getCertify(String uid);
 
     void emailCertify(String username, String uid);
 }

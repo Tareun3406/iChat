@@ -1,6 +1,5 @@
 package kr.tareun.ranchat.model.entitiy;
 
-import kr.tareun.ranchat.model.vo.CertifyVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,8 +28,4 @@ public class CertifyUID{
     @CreationTimestamp
     @Column(name = "date")
     private LocalDateTime insDate; // 유효시간 체크용 date;
-
-    public CertifyVO toVO(){
-        return new CertifyVO(username.getUsername(), uid, type, insDate);
-    }
 }

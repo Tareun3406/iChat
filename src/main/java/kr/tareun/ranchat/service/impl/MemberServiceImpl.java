@@ -1,12 +1,12 @@
 package kr.tareun.ranchat.service.impl;
 
 import kr.tareun.ranchat.model.dto.AuthDTO;
+import kr.tareun.ranchat.model.dto.CertifyDTO;
 import kr.tareun.ranchat.model.dto.EmailDTO;
 import kr.tareun.ranchat.model.dto.MemberDTO;
 import kr.tareun.ranchat.model.entitiy.Auth;
 import kr.tareun.ranchat.model.entitiy.CertifyUID;
 import kr.tareun.ranchat.model.entitiy.Member;
-import kr.tareun.ranchat.model.vo.CertifyVO;
 import kr.tareun.ranchat.repository.AuthRepository;
 import kr.tareun.ranchat.repository.CertifyUIDRepository;
 import kr.tareun.ranchat.repository.MemberRepository;
@@ -95,7 +95,7 @@ public class MemberServiceImpl implements MemberService {
         EmailDTO mailCont = new EmailDTO(
                 "tareun3406@gmail.com",
                 "아이톡 비밀번호 찾기",
-                "아래 링크를 통해 비밀번호를 변경해주세요.\n http://localhost:3000/linkPwFind?username="+member.getUsername()+"&uid="+uid,
+                "아래 링크를 통해 비밀번호를 변경해주세요.\n http://ranchat.kr:3000/ChangePw?username="+member.getUsername()+"&uid="+uid,
                 member.getUsername() //메일을 받을 대상 이메일
         );
         certifyUIDRepository.save(certifyUID);
@@ -103,18 +103,16 @@ public class MemberServiceImpl implements MemberService {
         return true;
     }
 
+    @Transactional
     @Override
     public int updatePw(String username, String pw) {
         return memberRepository.updatePassword(username, passwordEncoder.encode(pw));
     }
 
     @Override
-    public CertifyVO getCertify(String username) {
-        Optional<CertifyUID> optional = certifyUIDRepository.findById(username);
-        if (optional.isPresent()){
-            return  optional.get().toVO();
-        }else
-            return null;
+    public CertifyDTO getCertify(String uid) {
+        Optional<CertifyUID> optional = certifyUIDRepository.findById(uid);
+        return optional.map(CertifyDTO::entityToDTO).orElse(null);  // 테이블에서 정보를 찾지 못했을 경우 null 리턴.
     }
 
     @Override

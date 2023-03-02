@@ -1,7 +1,7 @@
 package kr.tareun.ranchat.controller;
 
+import kr.tareun.ranchat.model.dto.CertifyDTO;
 import kr.tareun.ranchat.model.dto.MemberDTO;
-import kr.tareun.ranchat.model.vo.CertifyVO;
 import kr.tareun.ranchat.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -51,10 +51,10 @@ public class MemberController {
             memberService.sendFindPwMail(memberInfo);
     }
     @PatchMapping("/changePw")
-    public void changePw(@RequestBody CertifyVO certify,@RequestParam String password, HttpServletResponse response){
-        CertifyVO certifyData = memberService.getCertify(certify.getUsername());
-        if (certifyData != null && certifyData.getUid().equals(certify.getUid())){
-            memberService.updatePw(certify.getUsername(),password);
+    public void changePw(@RequestBody CertifyDTO certify, HttpServletResponse response){
+        CertifyDTO certifyData = memberService.getCertify(certify.getUid());
+        if (certifyData != null && certifyData.getUsername().equals(certify.getUsername())){
+            memberService.updatePw(certify.getUsername(),certify.getPassword());
         }else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
