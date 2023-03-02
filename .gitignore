@@ -43,3 +43,7 @@ application-gitignore.properties
 
 ### macOS ###
 .DS_Store
+
+
+### build 파일 ###
+src/main/resources/static/
