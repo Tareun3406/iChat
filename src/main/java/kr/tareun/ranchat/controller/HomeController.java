@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class HomeController {
 
-    @GetMapping(value = {"/","/RanChat", "/LoginForm", "JoinForm"})
+    @GetMapping(value = {"/","/RanChat", "/LoginForm", "JoinForm", "SearchPW", "ChangePw"})
     public String view(){
         return "forward:/index.html";
     }
