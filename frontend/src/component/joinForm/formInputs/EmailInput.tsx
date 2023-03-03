@@ -22,12 +22,12 @@ const EmailValidMessage = (props: props)=>{
                 if(text === "true"){
                     setCssIsValid("is-invalid");
                     setInValidMsg("중복 이메일입니다. 다른 이메일을 사용해주세요.");
-                    props.isValidEmail.current = true;
+                    props.isValidEmail.current = false;
                 }else{
                     setCssIsValid("is-valid");
                     setValidMsg("사용 가능한 이메일입니다.");
                     setNeedCheckMsg("");
-                    props.isValidEmail.current = false;
+                    props.isValidEmail.current = true;
                 }
             });
         }
@@ -60,11 +60,12 @@ const EmailValidMessage = (props: props)=>{
                        style={{width:"20rem", display:"inline-block"}}/>
                 <button type="button" className="btn btn-primary" onClick={emailDoubleCheck}
                         style={{borderTopLeftRadius:"15rem", borderBottomLeftRadius:"15rem", width:"7rem"}}>중복확인</button>
+                <div className="invalid-feedback" style={{fontSize:"1rem"}}>{inValidMsg}</div>
+                <div className="valid-feedback"  style={{fontSize:"1rem"}}>{validMsg}
+                    <span style={{fontWeight:"bold", color:"#e52527"}}>{needCheckMsg}</span>
+                </div>
             </div>
-            <div className="invalid-feedback" style={{fontSize:"1rem"}}>{inValidMsg}</div>
-            <div className="valid-feedback"  style={{fontSize:"1rem"}}>{validMsg}
-                <span style={{fontWeight:"bold", color:"#e52527"}}>{needCheckMsg}</span>
-            </div>
+
             <div style={blankDivCss}/>
         </div>
     );

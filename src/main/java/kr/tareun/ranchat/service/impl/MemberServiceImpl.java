@@ -45,7 +45,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void joinMember(MemberDTO member) {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
-        member.setCertified(false);
+        member.setCertified(true);          // 이메일 인증 확인 유무, true=인증됨
         Member memberEntity = member.toEntity();
         AuthDTO auth = new AuthDTO("USER", memberEntity.getUsername());
         Auth authEntity = auth.toEntity(memberEntity);
@@ -95,7 +95,7 @@ public class MemberServiceImpl implements MemberService {
         EmailDTO mailCont = new EmailDTO(
                 "tareun3406@gmail.com",
                 "아이톡 비밀번호 찾기",
-                "아래 링크를 통해 비밀번호를 변경해주세요.\n http://ranchat.kr:3000/ChangePw?username="+member.getUsername()+"&uid="+uid,
+                "아래 링크를 통해 비밀번호를 변경해주세요.\n http://ranchat.kr:8080/ChangePw?username="+member.getUsername()+"&uid="+uid,
                 member.getUsername() //메일을 받을 대상 이메일
         );
         certifyUIDRepository.save(certifyUID);
