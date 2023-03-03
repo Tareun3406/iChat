@@ -57,9 +57,9 @@ const EmailValidMessage = (props: props)=>{
             <div style={{width:"max-content"}}>
                 <input type="text" name="username" placeholder="ex) anno123@google.com" className={"form-control "+ cssIsValid} id="EmailForm"
                        value={emailValue} onChange={(event)=>{setEmailValue(event.target.value)}}
-                       style={{width:"20rem", display:"inline-block"}}/>
+                       style={{width:"20rem", display:"inline-block", marginRight:"0.3rem"}}/>
                 <button type="button" className="btn btn-primary" onClick={emailDoubleCheck}
-                        style={{borderTopLeftRadius:"15rem", borderBottomLeftRadius:"15rem", width:"7rem"}}>중복확인</button>
+                        style={{borderTopLeftRadius:"15rem", borderBottomLeftRadius:"15rem", width:"7rem", verticalAlign:"top"}}>중복확인</button>
                 <div className="invalid-feedback" style={{fontSize:"1rem"}}>{inValidMsg}</div>
                 <div className="valid-feedback"  style={{fontSize:"1rem"}}>{validMsg}
                     <span style={{fontWeight:"bold", color:"#e52527"}}>{needCheckMsg}</span>
