@@ -1,24 +1,20 @@
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import GetUserId from "../util/GetUserId";
-import CsrfToken from "../util/CsrfToken";
 
 const Home: React.FC = () => {
 
   const [link, setLink] = useState<JSX.Element>();
   const [userId,setUserId] = GetUserId();
-  const [csrf, setCsrf] = useState<string>("");
 
   const titleMenuStyle: React.CSSProperties = {
     display:"block", fontSize:"1.5rem", margin:"1em"
   };
 
   const logout = ()=>{
-    if (csrf !== undefined)
     fetch("/logout",{
       method: "POST",
       headers: {
-        'X-CSRF-Token': csrf,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
     }).then((response)=>{
@@ -30,9 +26,7 @@ const Home: React.FC = () => {
       console.log("연결 오류")
     })
   }
-  useEffect(()=>{
-    CsrfToken(setCsrf);
-  },[])
+
   useEffect(() =>{
     if (userId?.toString().substring(0,5) ==='Guest'){
       setLink(

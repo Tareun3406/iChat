@@ -36,6 +36,9 @@ public class SpringSecurityConfig{
 
         // csrf 체크 제외
         http.csrf().ignoringAntMatchers("/emailCertify");
+        http.csrf().ignoringAntMatchers("/changePw");
+        http.csrf().ignoringAntMatchers("/logout");
+
 
         //비회원 세션관리
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
@@ -55,7 +58,7 @@ public class SpringSecurityConfig{
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("http://ranchat.kr:8080/");
+        configuration.addAllowedOrigin("http://ranchat.kr/");
         configuration.addAllowedOrigin("http://localhost:3000/");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");

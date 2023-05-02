@@ -25,7 +25,7 @@ public class MemberController {
     @PostMapping("/doJoin")
     public void joinMember(MemberDTO member, HttpServletResponse response) throws IOException {
         memberService.joinMember(member);
-        response.sendRedirect("http://ranchat.kr:8080/LoginForm");
+        response.sendRedirect("http://ranchat.kr/LoginForm");
     }
 
     @GetMapping("/getIsValidEmail")
@@ -54,7 +54,8 @@ public class MemberController {
     public void changePw(@RequestBody CertifyDTO certify, HttpServletResponse response){
         CertifyDTO certifyData = memberService.getCertify(certify.getUid());
         if (certifyData != null && certifyData.getUsername().equals(certify.getUsername())){
-            memberService.updatePw(certify.getUsername(),certify.getPassword());
+            int status = memberService.updatePw(certify.getUsername(),certify.getPassword());
+            System.out.println(status);
         }else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }

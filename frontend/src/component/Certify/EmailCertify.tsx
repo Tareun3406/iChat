@@ -1,10 +1,8 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect} from "react";
 import {Link} from "react-router-dom";
-import CsrfToken from "../util/CsrfToken";
 
 const EmailCertify = ()=>{
 
-    const [csrf, setCsrf] = useState<string>("");
 
 
     let getParameter = (key: string)=>{
@@ -12,19 +10,17 @@ const EmailCertify = ()=>{
     }
 
     useEffect(()=>{
-
         fetch("/emailCertify",{
             method:"PATCH",
             headers:{
                 'Content-type': 'application/json',
-                'X-CSRF-Token': csrf
             },
             body: JSON.stringify({
                 username: getParameter("username"),
                 uid: getParameter("uid")
             })
         }).then((response)=>{});
-    },[csrf])
+    },[])
 
     return(<div>
         이메일 인증이 완료되었습니다.

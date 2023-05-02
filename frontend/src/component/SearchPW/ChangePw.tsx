@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from "react";
 import queryString from "query-string";
 import {useNavigate} from "react-router-dom";
-import CsrfToken from "../util/CsrfToken";
 
 const ChangePw = ()=>{
     const navigate = useNavigate();
-    const [csrf, setCsrf] = useState<string>("");
 
     const exp = /^[a-zA-Z0-9~!@#$%^&*()]{8,32}$/
     const [pwValue, setPwValue] = useState("");
@@ -62,9 +60,6 @@ const ChangePw = ()=>{
         }
     },[pwValue,pwCheckValue])
 
-    useEffect(()=>{
-        CsrfToken(setCsrf)
-    },[])
 
     const onClick = ()=>{
         if (isValidPwCheck && isValidPwInput){
@@ -72,7 +67,6 @@ const ChangePw = ()=>{
             fetch("/changePw",{
                 method:"PATCH",
                 headers: {
-                    'X-CSRF-Token': csrf,
                     'Content-Type': 'application/json'
                 },
                 body:JSON.stringify({username : query.username, uid:query.uid, password:pwValue})
